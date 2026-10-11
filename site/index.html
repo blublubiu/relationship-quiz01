@@ -52,7 +52,7 @@ $('#newReview').onclick=showReviewSample;
 $('#copyReview').onclick=()=>{const text=$('#reviewSample').textContent.trim();if(navigator.clipboard?.writeText)navigator.clipboard.writeText(text).then(()=>showToast('这条评价已复制')).catch(()=>fallbackCopy(text));else fallbackCopy(text)};
 document.querySelectorAll('[data-close-modal]').forEach(el=>el.addEventListener('click',()=>{$('#reviewModal').classList.add('hidden');document.body.style.overflow=''}));
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('#reviewModal').classList.contains('hidden')){$('#reviewModal').classList.add('hidden');document.body.style.overflow=''}});
-$('#share').onclick=()=>{const lead=Object.keys(counts).sort((a,b)=>counts[b]-counts[a])[0],match=partnerMatches[lead],line=shareLines[lead];const card=$('#cardPreview');card.innerHTML=`<div class="share-art"><div class="share-brand">关系观察手册</div><div class="share-kicker">更适合你的相处对象</div><div class="share-title">${match.title}</div><div class="share-line">${line}</div><div class="share-divider"></div><div class="share-footer">你喜欢的类型，真的是适合你的类型吗？<br>分享给那个也在认真恋爱的人</div></div><button id="downloadCard" class="btn" style="margin-top:14px;width:100%">生成长图并保存 / 分享</button>`;card.classList.add('show');$('#downloadCard').onclick=()=>downloadCard(match,line,lead);card.scrollIntoView({behavior:'smooth',block:'center'})};
+$('#share').onclick=()=>{const lead=Object.keys(counts).sort((a,b)=>counts[b]-counts[a])[0],match=partnerMatches[lead],line=shareLines[lead];const card=$('#cardPreview');card.innerHTML=`<div class="share-art"><div class="share-brand">关系观察手册</div><div class="share-kicker">更适合你的相处对象</div><div class="share-title">${match.title}</div><div class="share-line">${line}</div><div class="share-divider"></div><div class="share-footer">你喜欢的类型，真的是适合你的类型吗？<br>分享给那个也在认真恋爱的人</div></div><button id="downloadCard" class="btn" style="margin-top:14px;width:100%">保存 / 分享这张卡片</button>`;card.classList.add('show');$('#downloadCard').onclick=()=>downloadCard(match,line);card.scrollIntoView({behavior:'smooth',block:'center'})};
 async function saveResultImage(){
   const button=$('#saveResult');
   button.disabled=true;
@@ -178,6 +178,34 @@ async function saveResultImage(){
   }
 }
 $('#saveResult').onclick=saveResultImage;
-async function downloadCard(match,line,lead){const btn=$('#downloadCard');btn.disabled=true;btn.textContent='正在生成 PNG 长图…';try{const c=document.createElement('canvas'),ctx=c.getContext('2d');c.width=1080;c.height=3200;ctx.fillStyle='#f7f5fc';ctx.fillRect(0,0,c.width,c.height);ctx.fillStyle='#eee8fa';ctx.beginPath();ctx.arc(80,160,250,0,Math.PI*2);ctx.fill();ctx.beginPath();ctx.arc(1030,2950,280,0,Math.PI*2);ctx.fill();ctx.fillStyle='#fff';ctx.beginPath();ctx.roundRect(58,58,964,3084,42);ctx.fill();ctx.strokeStyle='#e5ddf2';ctx.lineWidth=3;ctx.stroke();ctx.textAlign='center';let y=160;ctx.fillStyle='#9582b6';ctx.font='24px sans-serif';ctx.fillText('关  系  观  察  手  册',540,y);y+=170;ctx.font='27px sans-serif';ctx.fillText('更适合你的相处对象',540,y);y+=110;ctx.fillStyle='#7957a8';ctx.font='bold 58px serif';y=wrap(ctx,match.title,540,y,850,86)+65;ctx.fillStyle='#655875';ctx.font='32px serif';y=wrap(ctx,match.overview,540,y,820,58)+55;ctx.fillStyle='#d7caeb';ctx.fillRect(485,y,110,4);y+=90;ctx.fillStyle='#7957a8';ctx.font='30px sans-serif';ctx.fillText('这份关系里的你',540,y);y+=70;ctx.fillStyle='#655875';ctx.font='27px serif';const attraction=expandedNarratives[lead].attraction,behavior=expandedNarratives[lead].behavior;y=wrap(ctx,attraction,540,y,800,48)+70;y=wrap(ctx,behavior,540,y,800,48)+90;ctx.fillStyle='#7957a8';ctx.font='29px sans-serif';ctx.fillText('给认真靠近的你',540,y);y+=75;ctx.fillStyle='#655875';ctx.font='30px serif';y=wrap(ctx,line,540,y,810,58)+120;ctx.fillStyle='#a194b2';ctx.font='23px sans-serif';ctx.fillText('你喜欢的类型，真的是适合你的类型吗？',540,y);y+=65;ctx.fillText('趣味自我观察 · 结果仅供参考',540,y);ctx.fillStyle='#d7caeb';ctx.fillRect(455,y+65,170,3);const blob=await new Promise(resolve=>c.toBlob(resolve,'image/png'));if(!blob)throw new Error('图片生成失败，请重试。');const file=new File([blob],'关系观察手册-分享长图.png',{type:'image/png'});if(navigator.share&&navigator.canShare?.({files:[file]})){await navigator.share({files:[file],title:'关系观察手册',text:'这是我的关系观察结果。'})}else{const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=file.name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),30000);showToast('PNG 长图已下载，可在相册或下载目录中查看')}}catch(err){if(err.name!=='AbortError')showToast(err.message||'生成失败，请稍后重试')}finally{btn.disabled=false;btn.textContent='生成长图并保存 / 分享'}}
+async function downloadCard(match,line){
+ const btn=$('#downloadCard');btn.disabled=true;btn.textContent='正在生成分享卡…';
+ try{
+  const c=document.createElement('canvas'),ctx=c.getContext('2d');c.width=1080;c.height=1350;
+  ctx.fillStyle='#f7f5fc';ctx.fillRect(0,0,c.width,c.height);
+  ctx.fillStyle='#eee8fa';ctx.beginPath();ctx.arc(70,100,230,0,Math.PI*2);ctx.fill();
+  ctx.beginPath();ctx.arc(1040,1250,245,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle='#fff';ctx.beginPath();ctx.roundRect(48,48,984,1254,42);ctx.fill();
+  ctx.strokeStyle='#e5ddf2';ctx.lineWidth=3;ctx.stroke();ctx.textAlign='center';
+  ctx.fillStyle='#9582b6';ctx.font='25px sans-serif';ctx.fillText('关  系  观  察  手  册',540,205);
+  ctx.fillStyle='#9582b6';ctx.font='28px sans-serif';ctx.fillText('更适合你的相处对象',540,400);
+  ctx.fillStyle='#7957a8';ctx.font='bold 66px serif';let y=wrap(ctx,match.title,540,515,850,92)+72;
+  ctx.fillStyle='#d7caeb';ctx.fillRect(490,y,100,4);y+=86;
+  ctx.fillStyle='#655875';ctx.font='34px serif';y=wrap(ctx,line,540,y,810,62)+85;
+  ctx.fillStyle='#a194b2';ctx.font='24px sans-serif';ctx.fillText('你喜欢的类型，真的是适合你的类型吗？',540,y);
+  ctx.fillText('趣味自我观察 · 结果仅供参考',540,y+58);
+  ctx.fillStyle='#d7caeb';ctx.fillRect(455,y+115,170,3);
+  const blob=await new Promise(resolve=>c.toBlob(resolve,'image/png'));
+  if(!blob)throw new Error('图片生成失败，请重试。');
+  const file=new File([blob],'关系观察手册-分享卡.png',{type:'image/png'});
+  if(navigator.share&&navigator.canShare?.({files:[file]})){
+   await navigator.share({files:[file],title:'关系观察手册',text:'这是我的关系观察结果。'});
+  }else{
+   const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=file.name;document.body.appendChild(a);a.click();a.remove();
+   setTimeout(()=>URL.revokeObjectURL(url),30000);showToast('分享卡已下载');
+  }
+ }catch(err){if(err.name!=='AbortError')showToast(err.message||'生成失败，请稍后重试')}
+ finally{btn.disabled=false;btn.textContent='保存 / 分享这张卡片'}
+}
 function wrap(ctx,text,x,y,maxWidth,lineHeight){let line='';for(const ch of text){if(ctx.measureText(line+ch).width>maxWidth&&line){ctx.fillText(line,x,y);line=ch;y+=lineHeight}else line+=ch}if(line)ctx.fillText(line,x,y);return y}
 </script></body></html>
