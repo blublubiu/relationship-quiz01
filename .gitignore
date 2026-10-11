@@ -1,0 +1,7 @@
+.env
+data/
+__pycache__/
+*.py[cod]
+supabase/.temp/
+supabase/functions/.env
+supabase-code-import.sql
