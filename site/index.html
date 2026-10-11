@@ -30,7 +30,7 @@ body{background:radial-gradient(ellipse at 18% 0%,#fff 0,transparent 48%),var(--
 <section id="gate" class="gate"><div class="panel"><div class="eyebrow">A gentle relationship quiz</div><h1 class="title">你喜欢的类型，<br>真的是适合你的类型吗？</h1><p class="sub">12 个关系情境，看看你的偏好与相处需要</p><form id="gateForm"><input id="password" class="field" type="password" inputmode="numeric" placeholder="请输入访问密码" autocomplete="off"><button class="btn" type="submit">验证密码</button><div id="gateError" class="error" aria-live="polite"></div></form></div></section>
 <section id="start" class="hidden"><div class="panel gate-panel"><div class="eyebrow">关系观察手册</div><h1 class="title">准备好认识自己的关系偏好了吗？</h1><p class="sub">共 12 题，选择最接近你真实反应的答案。选完会自动进入下一题，也可以返回修改。</p><p id="usesLeft" class="uses-left"></p><button id="startTest" class="btn start-btn">开始测试</button></div></section>
 <section id="quiz" class="hidden"><header class="quiz-head"><div class="quiz-top"><span>你喜欢的类型，真的是适合你的类型吗？</span><span id="counter"></span></div><div class="progress"><i id="progress"></i></div></header><div class="panel"><div class="eyebrow">关系情境</div><h1 id="question" class="question"></h1><div id="answers" class="answers"></div><div class="nav"><button id="prev" class="btn secondary">上一题</button><button id="next" class="btn">下一题</button></div></div></section>
-<section id="result" class="hidden"><div class="panel"><header class="result-head"><div class="eyebrow">更适合你的相处对象</div><h1 id="resultName" class="result-name"></h1><p id="overview" class="result-intro"></p><div class="match-basis"><strong>为什么这种类型更适合你</strong><p id="matchBasis"></p></div></header><div class="section"><h2>01　容易被什么吸引</h2><p id="attraction"></p></div><div class="section"><h2>02　你在关系里的反应</h2><p id="behavior"></p></div><div class="section"><h2>03　从你的选择看</h2><p>下面选取三个关系情境，呈现你当时的具体选择。它们比单一类型更能说明本次结果是怎样形成的。</p><div id="sceneRead" class="scene-list"></div></div><div class="section"><h2>04　八个关系维度</h2><p>下方呈现各倾向在本次作答中的相对频次。它描述的是本次选择分布，不代表稳定人格或标准化测量分数。</p><div id="dimensions"></div></div><div class="section"><h2>05　你可能更需要的相处条件</h2><p id="needs"></p><div id="needDetail" class="guide-box"></div></div><div class="section"><h2>06　这种相处方式何时会让你累</h2><p id="stress"></p><div id="stressDetail" class="guide-box"></div></div><div class="section"><h2>07　可以尝试的相处办法</h2><p id="fit"></p><div id="fitDetail" class="guide-box"></div></div><div class="section"><h2>08　这份结果是怎样形成的</h2><p id="evidence"></p><div id="topTags" class="tags"></div><p id="evidenceDetail" class="subline"></p></div><div class="actions"><button id="share" class="btn">生成分享卡</button><button id="restart" class="btn secondary">重新测试</button><button id="reviewGift" class="btn">好评有礼</button></div><div id="cardPreview" class="card-preview"></div><p class="fine">本测试用于轻量自我观察。结果依据本次选择归纳，不是标准化心理测量或关系预测。</p></div></section>
+<section id="result" class="hidden"><div class="panel"><header class="result-head"><div class="eyebrow">更适合你的相处对象</div><h1 id="resultName" class="result-name"></h1><p id="overview" class="result-intro"></p><div class="match-basis"><strong>为什么这种类型更适合你</strong><p id="matchBasis"></p></div></header><div class="section"><h2>01　容易被什么吸引</h2><p id="attraction"></p></div><div class="section"><h2>02　你在关系里的反应</h2><p id="behavior"></p></div><div class="section"><h2>03　从你的选择看</h2><p>下面选取三个关系情境，呈现你当时的具体选择。它们比单一类型更能说明本次结果是怎样形成的。</p><div id="sceneRead" class="scene-list"></div></div><div class="section"><h2>04　八个关系维度</h2><p>下方呈现各倾向在本次作答中的相对频次。它描述的是本次选择分布，不代表稳定人格或标准化测量分数。</p><div id="dimensions"></div></div><div class="section"><h2>05　你可能更需要的相处条件</h2><p id="needs"></p><div id="needDetail" class="guide-box"></div></div><div class="section"><h2>06　这种相处方式何时会让你累</h2><p id="stress"></p><div id="stressDetail" class="guide-box"></div></div><div class="section"><h2>07　可以尝试的相处办法</h2><p id="fit"></p><div id="fitDetail" class="guide-box"></div></div><div class="section"><h2>08　这份结果是怎样形成的</h2><p id="evidence"></p><div id="topTags" class="tags"></div><p id="evidenceDetail" class="subline"></p></div><div class="actions"><button id="share" class="btn">生成分享卡</button><button id="restart" class="btn secondary">重新测试</button><button id="reviewGift" class="btn">好评有礼</button></div><div class="actions"><button id="saveResult" class="btn secondary">保存我的测试结果</button></div><div id="cardPreview" class="card-preview"></div><p class="fine">本测试用于轻量自我观察。结果依据本次选择归纳，不是标准化心理测量或关系预测。</p></div></section>
 </main><div id="toast" class="toast" role="status"></div><div id="reviewModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="reviewTitle"><div class="modal-scrim" data-close-modal></div><div class="modal-card"><button class="modal-close" type="button" aria-label="关闭" data-close-modal>×</button><div class="modal-icon">♡</div><h2 id="reviewTitle">好评有礼</h2><p>感谢你完成这次测试。留下真实评价并截图联系客服，即可领取 <strong>1 元返现</strong>。</p><div class="review-label">真实体验表达参考 · 随机展示一条</div><div id="reviewSample" class="review-sample" aria-live="polite"></div><p class="modal-note">请只在内容符合你真实体验时使用，也可以写下自己的感受。评价内容不影响领取。</p><div class="review-actions"><button id="newReview" class="btn secondary" type="button">换一条</button><button id="copyReview" class="btn" type="button">复制这条</button></div><p class="modal-note">完成评价后，把截图发送给店铺客服即可。</p></div></div>
 <script src="./config.js"></script>
 <script>
@@ -53,6 +53,131 @@ $('#copyReview').onclick=()=>{const text=$('#reviewSample').textContent.trim();i
 document.querySelectorAll('[data-close-modal]').forEach(el=>el.addEventListener('click',()=>{$('#reviewModal').classList.add('hidden');document.body.style.overflow=''}));
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('#reviewModal').classList.contains('hidden')){$('#reviewModal').classList.add('hidden');document.body.style.overflow=''}});
 $('#share').onclick=()=>{const lead=Object.keys(counts).sort((a,b)=>counts[b]-counts[a])[0],match=partnerMatches[lead],line=shareLines[lead];const card=$('#cardPreview');card.innerHTML=`<div class="share-art"><div class="share-brand">关系观察手册</div><div class="share-kicker">更适合你的相处对象</div><div class="share-title">${match.title}</div><div class="share-line">${line}</div><div class="share-divider"></div><div class="share-footer">你喜欢的类型，真的是适合你的类型吗？<br>分享给那个也在认真恋爱的人</div></div><button id="downloadCard" class="btn" style="margin-top:14px;width:100%">生成长图并保存 / 分享</button>`;card.classList.add('show');$('#downloadCard').onclick=()=>downloadCard(match,line,lead);card.scrollIntoView({behavior:'smooth',block:'center'})};
+async function saveResultImage(){
+  const button=$('#saveResult');
+  button.disabled=true;
+  button.textContent='正在整理测试报告…';
+  try{
+    if(document.fonts?.ready) await document.fonts.ready;
+    const lead=Object.keys(counts).sort((a,b)=>counts[b]-counts[a])[0];
+    const sorted=Object.keys(counts).sort((a,b)=>counts[b]-counts[a]);
+    const topCount=counts[lead];
+    const topDims=sorted.filter(key=>counts[key]===topCount);
+    const deepDims=topDims.slice(0,2);
+    const match=partnerMatches[lead];
+    const total=answers.filter(value=>value!==null).length;
+    const blocks=[];
+    const addText=(text,size=28,color='#655875',align='left',after=26,weight=400)=>{
+      blocks.push({type:'text',text:String(text??''),size,color,align,after,weight});
+    };
+    const addHeading=(text)=>blocks.push({type:'heading',text});
+    const addBar=(name,count,pct)=>blocks.push({type:'bar',name,count,pct});
+    addText('关  系  观  察  手  册',25,'#9582b6','center',34,500);
+    addText('你的关系观察报告',42,'#554663','center',28,500);
+    addText('更适合你的相处对象',25,'#9582b6','center',8,400);
+    addText(match.title,58,'#7957a8','center',28,600);
+    addText(match.overview,29,'#655875','center',45,400);
+    addHeading('为什么这种类型更适合你');
+    addText(deepDims.map(key=>partnerMatches[key].why).join(' '),27);
+    addHeading('容易被什么吸引');
+    addText(deepDims.map(key=>expandedNarratives[key].attraction).join('\n'),27);
+    addHeading('你在关系里的反应');
+    addText(deepDims.map(key=>expandedNarratives[key].behavior).join('\n'),27);
+    addHeading('从你的选择看 · 三个关系情境');
+    [1,5,11].forEach(index=>{
+      const chosen=questions[index].a[answers[index]];
+      addText('情境：'+questions[index].q,23,'#917bb0','left',6,500);
+      addText('你的选择：「'+chosen[0]+'」',26,'#51445f','left',5,500);
+      addText('观察：'+sceneReadings[chosen[1]],23,'#80758b','left',24,400);
+    });
+    addHeading('八个关系维度');
+    addText('以下是本次作答中的相对频次，不代表固定人格或标准化测量分数。',22,'#887b94','left',16,400);
+    sorted.forEach(key=>addBar(dims[key],counts[key],Math.round(counts[key]/Math.max(1,total)*100)));
+    addHeading('你可能更需要的相处条件');
+    addText(deepDims.map(key=>needReadings[key]).join(' '),26);
+    deepDims.forEach(key=>{
+      addText('生活里的样子 · '+dims[key]+'\n'+deepGuidance[key].need,23,'#70647e','left',22,400);
+    });
+    addHeading('这种相处方式何时会让你累');
+    addText(profiles[lead].stress,26);
+    deepDims.forEach(key=>addText(dims[key]+' · 可能发生的具体时刻\n'+deepGuidance[key].stress,23,'#70647e','left',22,400));
+    addHeading('可以尝试的相处办法');
+    addText(profiles[lead].fit,26);
+    deepDims.forEach(key=>addText(dims[key]+' · 可以从一小步开始\n'+deepGuidance[key].practice+'\n「'+deepGuidance[key].phrase+'」',23,'#70647e','left',28,400));
+    addHeading('这份结果是怎样形成的');
+    addText('本次完成 '+total+' 道题。「'+dims[lead]+'」是出现频次最高的观察维度（'+topCount+' 次）'+(topDims.length>1?'，与其他维度并列':'')+'。',24);
+    addText('本次选择分布：'+sorted.slice(0,3).map(key=>dims[key]+' '+counts[key]+' 次').join('；')+'。这描述的是本次答题，不代表你在所有关系、所有时期都一样。',22,'#887b94');
+    addText('趣味自我观察 · 结果仅供参考，不是标准化心理测量或关系预测。',20,'#a194b2','center',0,400);
+
+    const measure=document.createElement('canvas').getContext('2d');
+    const maxWidth=870;
+    let y=108;
+    for(const block of blocks){
+      block.y=y;
+      if(block.type==='heading'){y+=82;continue}
+      if(block.type==='bar'){y+=88;continue}
+      measure.font=block.weight+' '+block.size+'px "Noto Sans SC", sans-serif';
+      const lines=[];
+      for(const paragraph of block.text.split('\n')){
+        if(!paragraph){lines.push('');continue}
+        let line='';
+        for(const character of paragraph){
+          if(line&&measure.measureText(line+character).width>maxWidth){lines.push(line);line=character}
+          else line+=character;
+        }
+        if(line)lines.push(line);
+      }
+      block.lines=lines;
+      block.lineHeight=Math.round(block.size*1.72);
+      y+=Math.max(1,lines.length)*block.lineHeight+block.after;
+    }
+    const canvas=document.createElement('canvas');
+    canvas.width=1080;
+    canvas.height=y+95;
+    const ctx=canvas.getContext('2d');
+    ctx.fillStyle='#f7f5fc';ctx.fillRect(0,0,canvas.width,canvas.height);
+    ctx.fillStyle='#eee8fa';ctx.beginPath();ctx.arc(70,110,245,0,Math.PI*2);ctx.fill();
+    ctx.beginPath();ctx.arc(1020,canvas.height-100,270,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle='#fff';ctx.beginPath();ctx.roundRect(42,42,996,canvas.height-84,38);ctx.fill();
+    ctx.strokeStyle='#e5ddf2';ctx.lineWidth=3;ctx.stroke();
+    for(const block of blocks){
+      if(block.type==='heading'){
+        ctx.fillStyle='#7957a8';ctx.font='500 34px "Noto Serif SC", serif';ctx.textAlign='left';
+        ctx.fillText(block.text,104,block.y);
+        ctx.fillStyle='#e6def4';ctx.fillRect(104,block.y+21,872,2);
+        continue;
+      }
+      if(block.type==='bar'){
+        ctx.textAlign='left';ctx.fillStyle='#655875';ctx.font='400 24px "Noto Sans SC", sans-serif';ctx.fillText(block.name,104,block.y+18);
+        ctx.fillStyle='#a194b2';ctx.font='400 19px "Noto Sans SC", sans-serif';ctx.fillText('选择 '+block.count+' 次',104,block.y+49);
+        ctx.fillStyle='#eeeaf3';ctx.beginPath();ctx.roundRect(350,block.y+5,540,14,7);ctx.fill();
+        ctx.fillStyle='#b9a6d6';ctx.beginPath();ctx.roundRect(350,block.y+5,Math.max(2,540*block.pct/100),14,7);ctx.fill();
+        ctx.textAlign='right';ctx.fillStyle='#856da8';ctx.font='400 22px "Noto Sans SC", sans-serif';ctx.fillText(block.pct+'%',972,block.y+19);
+        continue;
+      }
+      ctx.fillStyle=block.color;ctx.font=block.weight+' '+block.size+'px "Noto Sans SC", sans-serif';
+      ctx.textAlign=block.align;
+      const x=block.align==='center'?540:104;
+      block.lines.forEach((line,index)=>ctx.fillText(line,x,block.y+index*block.lineHeight));
+    }
+    const blob=await new Promise(resolve=>canvas.toBlob(resolve,'image/png'));
+    if(!blob)throw new Error('图片生成失败，请重试。');
+    const file=new File([blob],'关系观察手册-我的测试结果.png',{type:'image/png'});
+    if(navigator.share&&navigator.canShare?.({files:[file]})){
+      await navigator.share({files:[file],title:'我的关系观察报告',text:'这是我的关系观察测试结果。'});
+    }else{
+      const url=URL.createObjectURL(blob),link=document.createElement('a');
+      link.href=url;link.download=file.name;document.body.appendChild(link);link.click();link.remove();
+      setTimeout(()=>URL.revokeObjectURL(url),30000);
+      showToast('测试结果长图已保存到下载目录');
+    }
+  }catch(error){
+    if(error.name!=='AbortError')showToast(error.message||'生成失败，请稍后重试');
+  }finally{
+    button.disabled=false;button.textContent='保存我的测试结果';
+  }
+}
+$('#saveResult').onclick=saveResultImage;
 async function downloadCard(match,line,lead){const btn=$('#downloadCard');btn.disabled=true;btn.textContent='正在生成 PNG 长图…';try{const c=document.createElement('canvas'),ctx=c.getContext('2d');c.width=1080;c.height=3200;ctx.fillStyle='#f7f5fc';ctx.fillRect(0,0,c.width,c.height);ctx.fillStyle='#eee8fa';ctx.beginPath();ctx.arc(80,160,250,0,Math.PI*2);ctx.fill();ctx.beginPath();ctx.arc(1030,2950,280,0,Math.PI*2);ctx.fill();ctx.fillStyle='#fff';ctx.beginPath();ctx.roundRect(58,58,964,3084,42);ctx.fill();ctx.strokeStyle='#e5ddf2';ctx.lineWidth=3;ctx.stroke();ctx.textAlign='center';let y=160;ctx.fillStyle='#9582b6';ctx.font='24px sans-serif';ctx.fillText('关  系  观  察  手  册',540,y);y+=170;ctx.font='27px sans-serif';ctx.fillText('更适合你的相处对象',540,y);y+=110;ctx.fillStyle='#7957a8';ctx.font='bold 58px serif';y=wrap(ctx,match.title,540,y,850,86)+65;ctx.fillStyle='#655875';ctx.font='32px serif';y=wrap(ctx,match.overview,540,y,820,58)+55;ctx.fillStyle='#d7caeb';ctx.fillRect(485,y,110,4);y+=90;ctx.fillStyle='#7957a8';ctx.font='30px sans-serif';ctx.fillText('这份关系里的你',540,y);y+=70;ctx.fillStyle='#655875';ctx.font='27px serif';const attraction=expandedNarratives[lead].attraction,behavior=expandedNarratives[lead].behavior;y=wrap(ctx,attraction,540,y,800,48)+70;y=wrap(ctx,behavior,540,y,800,48)+90;ctx.fillStyle='#7957a8';ctx.font='29px sans-serif';ctx.fillText('给认真靠近的你',540,y);y+=75;ctx.fillStyle='#655875';ctx.font='30px serif';y=wrap(ctx,line,540,y,810,58)+120;ctx.fillStyle='#a194b2';ctx.font='23px sans-serif';ctx.fillText('你喜欢的类型，真的是适合你的类型吗？',540,y);y+=65;ctx.fillText('趣味自我观察 · 结果仅供参考',540,y);ctx.fillStyle='#d7caeb';ctx.fillRect(455,y+65,170,3);const blob=await new Promise(resolve=>c.toBlob(resolve,'image/png'));if(!blob)throw new Error('图片生成失败，请重试。');const file=new File([blob],'关系观察手册-分享长图.png',{type:'image/png'});if(navigator.share&&navigator.canShare?.({files:[file]})){await navigator.share({files:[file],title:'关系观察手册',text:'这是我的关系观察结果。'})}else{const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=file.name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),30000);showToast('PNG 长图已下载，可在相册或下载目录中查看')}}catch(err){if(err.name!=='AbortError')showToast(err.message||'生成失败，请稍后重试')}finally{btn.disabled=false;btn.textContent='生成长图并保存 / 分享'}}
 function wrap(ctx,text,x,y,maxWidth,lineHeight){let line='';for(const ch of text){if(ctx.measureText(line+ch).width>maxWidth&&line){ctx.fillText(line,x,y);line=ch;y+=lineHeight}else line+=ch}if(line)ctx.fillText(line,x,y);return y}
 </script></body></html>
