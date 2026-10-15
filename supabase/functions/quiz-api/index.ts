@@ -193,12 +193,12 @@ Deno.serve(async (req: Request) => {
     if (req.method === "POST" && route === "/api/admin/batches") {
       const payload = await readBody(req);
       const count = Number(payload.count ?? 1);
-      const maxUses = Number(payload.max_uses ?? 3);
+      const maxUses = Number(payload.max_uses ?? 5);
       if (!Number.isInteger(count) || count < 1 || count > 500) {
         return response({ error: "每批可生成 1 到 500 个密码。" }, 400, origin);
       }
-      if (!Number.isInteger(maxUses) || maxUses < 1 || maxUses > 20) {
-        return response({ error: "单个密码的可用次数需在 1 到 20 次之间。" }, 400, origin);
+      if (!Number.isInteger(maxUses) || maxUses < 1 || maxUses > 5) {
+        return response({ error: "单个密码的可用次数需在 1 到 5 次之间。" }, 400, origin);
       }
       const label = String(payload.label ?? "").trim().slice(0, 80) || `密码批次 ${new Date().toLocaleString("zh-CN")}`;
       const batchId = crypto.randomUUID();
