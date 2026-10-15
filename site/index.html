@@ -95,6 +95,7 @@ const fallbackReviewSamples=[
 ];
 function showReviewSample(){const target=$('#reviewSample');const samples=Array.isArray(reviewSamples)&&reviewSamples.length?reviewSamples:fallbackReviewSamples;if(!samples.length){target.textContent='欢迎留下你真实的体验感受。';return}let next=Math.floor(Math.random()*samples.length);if(samples.length>1&&next===lastReviewIndex)next=(next+1+Math.floor(Math.random()*(samples.length-1)))%samples.length;lastReviewIndex=next;target.textContent=samples[next]}
 function closeReviewModal(){const modal=$('#reviewModal');modal.classList.add('hidden');document.body.style.removeProperty('overflow')}
+$('#reviewModal .modal-close').addEventListener('click',closeReviewModal);
 $('#reviewGift').onclick=()=>{$('#reviewModal').classList.remove('hidden');document.body.style.overflow='hidden';showReviewSample()};
 $('#newReview').onclick=showReviewSample;
 $('#copyReview').onclick=()=>{const text=$('#reviewSample').textContent.trim();if(!text){showToast('当前没有可复制的内容');return}if(navigator.clipboard?.writeText)navigator.clipboard.writeText(text).then(()=>showToast('这条评价已复制')).catch(()=>fallbackCopy(text));else fallbackCopy(text)};
