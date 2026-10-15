@@ -150,7 +150,7 @@ Deno.serve(async (req: Request) => {
       if (state.blockedUntil > now) return response({ error: "尝试次数过多，请稍后再试。" }, 429, origin);
       const payload = await readBody(req);
       const expected = Deno.env.get("ADMIN_PASSWORD") ?? "";
-      if (expected.length < 12 || !constantTimeEqual(String(payload.password ?? ""), expected)) {
+      if (expected.length < 4 || !constantTimeEqual(String(payload.password ?? ""), expected)) {
         state.count += 1;
         if (state.count >= 8) state.blockedUntil = now + 300;
         loginFailures.set(ip, state);
