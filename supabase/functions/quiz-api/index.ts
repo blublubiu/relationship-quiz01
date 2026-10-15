@@ -26,6 +26,10 @@ function normalizeCode(value: unknown) {
   return String(value ?? "").toUpperCase().replace(/[^A-Z0-9]/g, "");
 }
 
+function legacyFormattedCode(value: string) {
+  return value.match(/.{4}/g)?.join("-") ?? value;
+}
+
 async function sha256(value: string) {
   const digest = await crypto.subtle.digest("SHA-256", encoder.encode(value));
   return [...new Uint8Array(digest)].map((byte) => byte.toString(16).padStart(2, "0")).join("");
@@ -121,11 +125,23 @@ Deno.serve(async (req: Request) => {
       const codePayload = await readBody(req);
       const code = normalizeCode(codePayload.code);
       if (code.length !== 12) return failureResponse("invalid", origin);
-      const { data, error } = await supabase.from("quiz_access_codes")
+      let { data, error } = await supabase.from("quiz_access_codes")
         .select("max_uses,used_count,disabled_at")
         .eq("code_hash", await sha256(code))
         .maybeSingle();
       if (error) throw error;
+      // Older batches hashed the displayed XXXX-XXXX-XXXX value before the
+      // input normalization was added. Keep those passwords usable.
+      if (!data) {
+        const legacyCode = legacyFormattedCode(code);
+        if (legacyCode !== code) {
+          ({ data, error } = await supabase.from("quiz_access_codes")
+            .select("max_uses,used_count,disabled_at")
+            .eq("code_hash", await sha256(legacyCode))
+            .maybeSingle());
+          if (error) throw error;
+        }
+      }
       if (!data || data.disabled_at !== null) return failureResponse("invalid", origin);
       if (data.used_count >= data.max_uses) return failureResponse("exhausted", origin);
       return response({ valid: true, remaining: data.max_uses - data.used_count, content: getQuizContent() }, 200, origin);
@@ -135,10 +151,19 @@ Deno.serve(async (req: Request) => {
       const payload = await readBody(req);
       const code = normalizeCode(payload.code);
       if (code.length !== 12) return response({ error: "密码格式无效，请重新输入。" }, 400, origin);
-      const { data, error } = await supabase.rpc("quiz_consume_access_code", {
+      let { data, error } = await supabase.rpc("quiz_consume_access_code", {
         code_hash_input: await sha256(code),
       });
       if (error) throw error;
+      if (!data?.ok && data?.reason === "invalid") {
+        const legacyCode = legacyFormattedCode(code);
+        if (legacyCode !== code) {
+          ({ data, error } = await supabase.rpc("quiz_consume_access_code", {
+            code_hash_input: await sha256(legacyCode),
+          }));
+          if (error) throw error;
+        }
+      }
       if (!data?.ok) return failureResponse(data?.reason ?? "invalid", origin);
       return response({ ok: true, remaining: data.remaining }, 200, origin);
     }
@@ -209,7 +234,7 @@ Deno.serve(async (req: Request) => {
       });
       if (batchError) throw batchError;
       const rows = await Promise.all(codes.map(async (password) => ({
-        id: crypto.randomUUID(), batch_id: batchId, code_hash: await sha256(password),
+        id: crypto.randomUUID(), batch_id: batchId, code_hash: await sha256(normalizeCode(password)),
         max_uses: maxUses, used_count: 0, created_at: createdAt,
       })));
       const { error: codesError } = await supabase.from("quiz_access_codes").insert(rows);
