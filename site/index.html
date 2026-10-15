@@ -212,7 +212,7 @@ async function saveResultImage(){
     const blob=await new Promise(resolve=>canvas.toBlob(resolve,'image/png'));
     if(!blob)throw new Error('图片生成失败，请重试。');
     const file=new File([blob],'关系观察手册-我的测试结果.png',{type:'image/png'});
-    await shareImageFile(blob,file.name,'我的关系观察报告','这是我的关系观察测试结果。','手机端请长按图片，选择“保存到照片/相册”；电脑端可右键图片另存为。');
+    showImageFallback(blob,file.name,'长按下方图片，选择“保存到相册/照片”。如果当前应用内无法保存，请点右上角菜单，在系统浏览器中打开后再长按保存。电脑端可右键图片另存为。');
   }catch(error){
     if(error.name!=='AbortError')showToast(error.message||'生成失败，请稍后重试');
   }finally{
