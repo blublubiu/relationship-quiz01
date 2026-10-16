@@ -53,7 +53,7 @@ export async function createShareImage(report) {
   ctx.drawImage(image, 202, 337, 676, 394);
   let y = write(ctx, r.quote, 540, 768, 805, 39, '#7b638a', { align: 'center', serif: true, leading: 1.8 });
   y = Math.max(y + 66, 1003);
-  write(ctx, r.keywords.join('  ·  '), 540, y, 880, 23, '#ab94bc', { align: 'center' });
+  write(ctx, '（' + r.profileLabel + '）', 540, y, 880, 23, '#ab94bc', { align: 'center' });
   rounded(ctx, 481, 1128, 118, 3, 1, '#e1d3ed');
   write(ctx, '潜意识伴侣契合度测试', 540, 1180, 870, 25, '#9d85b0', { align: 'center' });
   write(ctx, '12 个关系瞬间 · 看见具体需要 · 自我观察参考', 540, 1230, 900, 19, '#bbafc3', { align: 'center' });
@@ -70,8 +70,7 @@ export async function createReportImage(report) {
   text(r.name, 45, '#74518f', 2, { align: 'center', serif: true, weight: 500 });
   blocks.push({ kind: 'art', height: 312, after: 9 });
   text(r.quote, 30, '#7b608d', 24, { align: 'center', serif: true });
-  text(r.keywords.join(' · '), 19, '#a28ab5', 25, { align: 'center' });
-  text(r.intro, 24);
+  text('（' + r.profileLabel + '）', 19, '#a28ab5', 25, { align: 'center' });
   heading('02', '你真正想被怎样对待？'); text(r.explanation);
   for (const e of report.evidence) card(e.group + ' · ' + e.scene, '你的选择：' + e.choice, e.reading);
   if (report.nuance) card('还有一处选择，值得一起看', report.nuance.scene + '：' + report.nuance.choice, report.nuance.text, '#fcf8f2');

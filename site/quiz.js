@@ -3,6 +3,7 @@ import { artMarkup } from './quiz-art.js';
 import { createReportImage, createShareImage } from './quiz-export.js';
 import { createStoryTheater } from './story-theater.js';
 import { selectStories } from './story-logic.js';
+import { applyPartnerHeading } from './partner-headings.js';
 
 const $ = selector => document.querySelector(selector);
 const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -108,16 +109,15 @@ $('#next').addEventListener('click', nextQuestion);
 function safeLink(url) { try { const parsed = new URL(url); return parsed.protocol === 'https:' ? esc(parsed.href) : '#'; } catch { return '#'; } }
 function renderReport(value) {
   storyTheater?.destroy(); storyTheater = null;
-  report = value; const r = report.result;
+  report = { ...value, result: applyPartnerHeading(value.result) }; const r = report.result;
   $('#resultBody').innerHTML = `
     <article class="report-module report-hero">
       <div class="module-kicker">01 / 更值得了解的伴侣画像</div>
       <p class="result-label">与你这次相处需要更贴近的，是</p>
       <h1 class="result-name">${esc(r.name)}</h1>
+      <p class="result-profile-label">（${esc(r.profileLabel)}）</p>
       <div class="report-art" aria-hidden="true">${artMarkup(r.id)}</div>
       <blockquote class="result-quote">${esc(r.quote)}</blockquote>
-      <div class="result-keywords">${r.keywords.map(k => `<span>${esc(k)}</span>`).join('')}</div>
-      <p class="result-intro">${esc(r.intro)}</p>
     </article>
     <article class="report-module">
       <div class="module-kicker">02 / 从你的选择出发</div><h2 class="module-heading">你真正想被怎样对待？</h2>

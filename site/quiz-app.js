@@ -16,6 +16,20 @@
     };
   }
 
+  // site/partner-headings.js
+  var headings = {
+    R1: ["\u6E29\u67D4\u7684\u964D\u7EF4\u6253\u51FB\u8005", "\u7126\u8651\u578B+\u949D\u611F\u5305\u5BB9", "\u4F60\u4F5C\u95F9\u65F6\uFF0Cta\u50CF\u770B\u5C0F\u5B69\u4E00\u6837\u770B\u7740\u4F60\u3002"],
+    R2: ["\u6E05\u9192\u7684\u7834\u58C1\u4EBA", "\u56DE\u907F\u578B+\u9AD8\u8FB9\u754C\u5C0A\u91CD", "\u4E0D\u54C4\u4F60\uFF0C\u4F46\u7528\u6781\u5EA6\u7684\u5C0A\u91CD\u64AC\u5F00\u4F60\u7684\u9632\u5FA1\u3002"],
+    R3: ["\u5E26\u523A\u7684\u5B88\u95E8\u5458", "\u8BA8\u597D\u578B+\u5E95\u7EBF\u91CD\u5851", "\u770B\u4F3C\u51B7\u9177\uFF0C\u5374\u662F\u552F\u4E00\u6562\u66FF\u4F60\u6321\u4E0B\u59D4\u5C48\u7684\u4EBA\u3002"],
+    R4: ["\u9AD8\u914D\u5F97\u611F\u7684\u540C\u8C0B", "\u5B89\u5168/\u72EC\u7ACB\u578B+\u667A\u6027\u6210\u957F", "\u4E0D\u8C08\u98CE\u6708\u5E9F\u8BDD\uFF0C\u53EA\u8DDF\u4F60\u8C08\u8BA4\u77E5\u548C\u641E\u94B1\u3002"],
+    R5: ["\u900F\u660E\u7684\u951A\u70B9", "\u6050\u60E7\u578B+\u60C5\u7EEA\u5BB9\u5668", "\u80FD\u770B\u7A7F\u4F60\u6BCF\u4E00\u6B21\u8BF4\u201C\u6EDA\u201D\u7684\u80CC\u540E\u90FD\u5728\u558A\u201C\u62B1\u7D27\u6211\u201D\u3002"],
+    R6: ["\u65F7\u91CE\u7684\u5F15\u8DEF\u4EBA", "\u8FF7\u5931/\u604B\u7231\u8111+\u81EA\u6211\u5524\u9192", "\u7EDD\u4E0D\u628A\u4F60\u5F53\u9644\u5C5E\u54C1\uFF0C\u786C\u751F\u751F\u62FD\u4F60\u53BB\u770B\u4E16\u754C\u3002"]
+  };
+  function applyPartnerHeading(result) {
+    const heading = headings[result.id];
+    return heading ? { ...result, name: heading[0], profileLabel: heading[1], quote: heading[2] } : result;
+  }
+
   // site/quiz-engine.js
   var CONTENT_VERSION = "partner-v2-20261016";
   function validateContent(content) {
@@ -109,7 +123,7 @@
     return {
       version: CONTENT_VERSION,
       createdAt: now,
-      result: winner.result,
+      result: applyPartnerHeading(winner.result),
       evidence: evidence.map(({ q, option }) => ({ questionId: q.id, group: content.groups.find((g) => g.id === q.group).name, scene: q.short, question: q.prompt, choice: option.text, reading: option.reading })),
       nuance: counter ? { scene: counter.q.short, choice: counter.option.text, text: counter.option.reading } : null,
       matchNote: prioritizeRepair ? "\u4F60\u7684\u9009\u62E9\u5728\u591A\u4E2A\u51B2\u7A81\u60C5\u5883\u4E2D\u90FD\u6307\u5411\u4FEE\u590D\u7684\u9700\u8981\uFF0C\u5E76\u5728\u6700\u540E\u4E00\u9898\u518D\u6B21\u5F3A\u8C03\u4E86\u8FD9\u4E00\u70B9\uFF0C\u56E0\u6B64\u672C\u6B21\u4F18\u5148\u5448\u73B0\u51B2\u7A81\u4FEE\u590D\u65B9\u5411\u3002" : close ? `\u4F60\u7684\u9009\u62E9\u540C\u65F6\u5E26\u6709\u201C${alternative.result.name}\u201D\u7684\u7EBF\u7D22\u3002\u8FD9\u6B21\u4F18\u5148\u5448\u73B0\u66F4\u7A81\u51FA\u7684\u76F8\u5904\u9700\u8981\uFF0C\u53EF\u628A\u4E24\u79CD\u65B9\u5411\u90FD\u4F5C\u4E3A\u89C2\u5BDF\u70B9\u3002` : "\u8FD9\u4E2A\u63A8\u8350\u6765\u81EA\u591A\u9053\u60C5\u5883\u7684\u4EA4\u53C9\u7EBF\u7D22\u3002\u5B83\u662F\u4E0B\u4E00\u6B65\u89C2\u5BDF\u7684\u65B9\u5411\uFF0C\u9002\u914D\u4ECD\u9700\u8981\u53CC\u65B9\u771F\u5B9E\u76F8\u5904\u6765\u786E\u8BA4\u3002",
@@ -209,7 +223,7 @@
     ctx.drawImage(image, 202, 337, 676, 394);
     let y = write(ctx, r.quote, 540, 768, 805, 39, "#7b638a", { align: "center", serif: true, leading: 1.8 });
     y = Math.max(y + 66, 1003);
-    write(ctx, r.keywords.join("  \xB7  "), 540, y, 880, 23, "#ab94bc", { align: "center" });
+    write(ctx, "\uFF08" + r.profileLabel + "\uFF09", 540, y, 880, 23, "#ab94bc", { align: "center" });
     rounded(ctx, 481, 1128, 118, 3, 1, "#e1d3ed");
     write(ctx, "\u6F5C\u610F\u8BC6\u4F34\u4FA3\u5951\u5408\u5EA6\u6D4B\u8BD5", 540, 1180, 870, 25, "#9d85b0", { align: "center" });
     write(ctx, "12 \u4E2A\u5173\u7CFB\u77AC\u95F4 \xB7 \u770B\u89C1\u5177\u4F53\u9700\u8981 \xB7 \u81EA\u6211\u89C2\u5BDF\u53C2\u8003", 540, 1230, 900, 19, "#bbafc3", { align: "center" });
@@ -229,8 +243,7 @@
     text(r.name, 45, "#74518f", 2, { align: "center", serif: true, weight: 500 });
     blocks.push({ kind: "art", height: 312, after: 9 });
     text(r.quote, 30, "#7b608d", 24, { align: "center", serif: true });
-    text(r.keywords.join(" \xB7 "), 19, "#a28ab5", 25, { align: "center" });
-    text(r.intro, 24);
+    text("\uFF08" + r.profileLabel + "\uFF09", 19, "#a28ab5", 25, { align: "center" });
     heading("02", "\u4F60\u771F\u6B63\u60F3\u88AB\u600E\u6837\u5BF9\u5F85\uFF1F");
     text(r.explanation);
     for (const e of report2.evidence) card(e.group + " \xB7 " + e.scene, "\u4F60\u7684\u9009\u62E9\uFF1A" + e.choice, e.reading);
@@ -537,17 +550,16 @@ ${item.choice}`, 19, "#a18caa", 17));
     var _a;
     storyTheater == null ? void 0 : storyTheater.destroy();
     storyTheater = null;
-    report = value;
+    report = { ...value, result: applyPartnerHeading(value.result) };
     const r = report.result;
     $("#resultBody").innerHTML = `
     <article class="report-module report-hero">
       <div class="module-kicker">01 / \u66F4\u503C\u5F97\u4E86\u89E3\u7684\u4F34\u4FA3\u753B\u50CF</div>
       <p class="result-label">\u4E0E\u4F60\u8FD9\u6B21\u76F8\u5904\u9700\u8981\u66F4\u8D34\u8FD1\u7684\uFF0C\u662F</p>
       <h1 class="result-name">${esc(r.name)}</h1>
+      <p class="result-profile-label">\uFF08${esc(r.profileLabel)}\uFF09</p>
       <div class="report-art" aria-hidden="true">${artMarkup(r.id)}</div>
       <blockquote class="result-quote">${esc(r.quote)}</blockquote>
-      <div class="result-keywords">${r.keywords.map((k) => `<span>${esc(k)}</span>`).join("")}</div>
-      <p class="result-intro">${esc(r.intro)}</p>
     </article>
     <article class="report-module">
       <div class="module-kicker">02 / \u4ECE\u4F60\u7684\u9009\u62E9\u51FA\u53D1</div><h2 class="module-heading">\u4F60\u771F\u6B63\u60F3\u88AB\u600E\u6837\u5BF9\u5F85\uFF1F</h2>
