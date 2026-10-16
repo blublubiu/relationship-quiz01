@@ -9,7 +9,22 @@
   <link rel="stylesheet" href="./quiz.css?v=20261016-2">
   <link rel="stylesheet" href="./story.css?v=20261016-1">
   <script src="./config.js"></script>
-  <script type="module" src="./quiz.js?v=20261016-3"></script>
+  <script>
+    // Block native navigation even while the application is loading or unavailable.
+    document.addEventListener('submit', function (event) {
+      if (!event.target || event.target.id !== 'gateForm') return;
+      event.preventDefault();
+      if (!window.quizEntryReady) {
+        var status = document.getElementById('gateError');
+        if (status) status.textContent = '页面尚未加载完整，请刷新后再试。密码已保留，本次没有提交验证。';
+      }
+    }, true);
+    function quizLoadFailed() {
+      var status = document.getElementById('gateError');
+      if (status) status.textContent = '页面加载中断，请刷新后再试。不要重复提交密码。';
+    }
+  </script>
+  <script defer src="./quiz-app.js?v=20261016-4" onerror="quizLoadFailed()"></script>
 </head>
 <body>
   <main class="shell">

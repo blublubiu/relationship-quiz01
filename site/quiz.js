@@ -20,7 +20,7 @@ function showView(id) {
   clearTimeout(advanceTimer);
   if (id !== 'result') storyTheater?.pause();
   for (const view of ['gate', 'quiz', 'result']) $('#' + view).classList.toggle('hidden', view !== id);
-  window.scrollTo({ top: 0, behavior: 'instant' });
+  window.scrollTo({ top: 0, behavior: 'auto' });
 }
 function toast(text) { $('#toast').textContent = text; $('#toast').classList.add('show'); clearTimeout(toast.timer); toast.timer = setTimeout(() => $('#toast').classList.remove('show'), 2600); }
 
@@ -52,11 +52,12 @@ $('#gateForm').addEventListener('submit', async event => {
     const data = await startRequest(code, controller.signal);
     const random = crypto.getRandomValues(new Uint32Array(1))[0];
     session = { version: CONTENT_VERSION, content: data.content, answers: {}, index: 0, presentation: shuffledOptions(data.content.questions, random), remaining: data.remaining, completed: false, createdAt: new Date().toISOString() };
-    report = null; $('#password').value = ''; persist(); showView('quiz'); renderQuestion();
+    report = null; persist(); renderQuestion(); showView('quiz'); $('#password').value = '';
   } catch (error) {
     $('#gateError').textContent = error.name === 'AbortError' || error instanceof TypeError ? '连接暂时中断，请稍后再试。如可用次数出现变化，请联系客服核对。' : error.message;
   } finally { clearTimeout(slow); clearTimeout(timeout); button.disabled = false; button.innerHTML = '验证密码，开始测试 <span aria-hidden="true">↗</span>'; }
 });
+window.quizEntryReady = true;
 
 function renderQuestion() {
   const q = session.content.questions[session.index], group = session.content.groups.find(g => g.id === q.group);

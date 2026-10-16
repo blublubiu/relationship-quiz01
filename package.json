@@ -3,8 +3,14 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "build": "esbuild site/quiz.js --bundle --format=iife --target=es2018 --outfile=site/quiz-app.js",
     "test": "node --test tests/*.test.mjs",
     "preview": "node tools/preview-server.mjs"
   },
-  "engines": { "node": ">=24" }
+  "engines": {
+    "node": ">=24"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.2"
+  }
 }
