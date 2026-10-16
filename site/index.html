@@ -1,282 +1,73 @@
 <!doctype html>
 <html lang="zh-CN">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#f6f1eb"><title>你喜欢的类型，真的是适合你的类型吗？</title>
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600&family=Noto+Sans+SC:wght@400;500;600&display=swap');
-:root{--paper:#f6f1eb;--card:#fffdfa;--ink:#493e3b;--muted:#887b75;--rose:#a96f72;--rose-light:#ead9d5;--line:#e9dfd8;--hint:#b9aaa4;--shadow:0 14px 40px #624c3b12}
-*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 20% 0%,#fffaf4 0,transparent 45%),var(--paper);color:var(--ink);font-family:'Noto Sans SC',sans-serif;font-size:15px;line-height:1.75;min-height:100vh}button,input{font:inherit}.shell{width:min(100% - 32px,680px);margin:auto;padding:28px 0 50px}.brand{font-family:'Noto Serif SC',serif;letter-spacing:.18em;font-size:12px;color:var(--rose);text-align:center;margin:4px 0 24px}.panel{background:var(--card);border:1px solid #eee5df;border-radius:22px;padding:clamp(24px,6vw,42px);box-shadow:var(--shadow)}.gate{min-height:calc(100vh - 100px);display:grid;align-items:center}.gate .panel{text-align:center;padding-top:52px;padding-bottom:52px}.eyebrow{font-size:11px;letter-spacing:.18em;color:var(--rose);text-transform:uppercase}.title{font-family:'Noto Serif SC',serif;font-weight:500;font-size:clamp(26px,6vw,38px);line-height:1.55;letter-spacing:.04em;margin:12px auto 18px;max-width:540px}.sub{color:var(--muted);font-size:13px}.field{display:block;width:100%;margin:28px 0 12px;padding:14px 16px;border:1px solid var(--line);border-radius:12px;background:#fff;color:var(--ink);outline:none}.field:focus{border-color:#c39791;box-shadow:0 0 0 3px #c397911a}.btn{border:0;background:var(--rose);color:white;border-radius:12px;padding:13px 20px;cursor:pointer;transition:.2s}.btn:hover{background:#935d62;transform:translateY(-1px)}.btn.secondary{background:transparent;border:1px solid var(--line);color:var(--ink)}.btn:disabled{opacity:.35;cursor:not-allowed;transform:none}.gate .btn{width:100%}.error{min-height:22px;color:#a15052;font-size:12px}.quiz-head{margin:14px 0 28px}.quiz-top{display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:12px}.progress{height:4px;background:#eee5df;border-radius:4px;margin-top:12px;overflow:hidden}.progress i{height:100%;display:block;background:linear-gradient(90deg,#c4908b,#ad7175);border-radius:4px;transition:width .3s}.question{font-family:'Noto Serif SC',serif;font-weight:500;font-size:clamp(23px,5vw,30px);line-height:1.6;margin:4px 0 24px}.answers{display:grid;gap:11px}.answer{width:100%;border:1px solid var(--line);background:#fffdfa;border-radius:14px;padding:14px 16px;text-align:left;color:var(--ink);cursor:pointer;transition:.18s}.answer:hover{border-color:#c99a95;background:#fffaf8}.answer.selected{border-color:var(--rose);background:#fbf3f0;box-shadow:0 0 0 2px #a96f7212}.answer-text{display:flex;gap:12px;align-items:flex-start}.letter{color:var(--rose);font-family:'Noto Serif SC',serif;font-size:13px;padding-top:2px}.hint{display:block;margin:5px 0 0 27px;font-size:11px;line-height:1.4;color:var(--hint);letter-spacing:.03em}.nav{display:flex;justify-content:space-between;gap:14px;margin-top:24px}.nav .btn{min-width:118px}.hidden{display:none!important}.result-head{text-align:center;padding:8px 0 26px}.result-name{font-family:'Noto Serif SC',serif;font-weight:500;font-size:clamp(27px,6vw,36px);line-height:1.45;margin:11px 0}.result-intro{max-width:530px;margin:0 auto;color:#716560;font-size:14px}.story-card{margin:24px auto 0;max-width:560px;padding:18px 20px;text-align:left;border-radius:16px;background:linear-gradient(135deg,#faf5f0,#f5eff6);border:1px solid #eee5ed}.story-label{font:500 12px "Noto Serif SC",serif;color:#9b7476;letter-spacing:.08em;margin-bottom:7px}.story-card p{margin:0;color:#685c63;font-size:14px;line-height:1.9}.path-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:14px}.path-card{padding:14px;border-radius:14px;background:#fffdfa;border:1px solid var(--line)}.path-card strong{display:block;font-size:13px;color:#6b5752;font-weight:500}.path-card small{display:inline-block;margin:5px 0 7px;color:#a57a77;font-size:10px;letter-spacing:.04em}.path-card p{font-size:12px;line-height:1.75}.path-card.primary{background:#faf3f0;border-color:#e9d7d1}.path-card.secondary{background:#f8f5fa;border-color:#e8dfec}.path-card.context{background:#fffdfa}.section{border-top:1px solid var(--line);padding:22px 0}.section:last-of-type{padding-bottom:4px}.section h2{font:500 18px 'Noto Serif SC',serif;margin:0 0 12px;color:#5b4844}.section p{margin:0;color:#746a65;font-size:14px}.dim-row{display:grid;grid-template-columns:100px 1fr 36px;gap:11px;align-items:center;margin:13px 0}.dim-name{font-size:12px;color:#71645f}.bar{height:7px;border-radius:8px;background:#f0e9e4;overflow:hidden}.bar i{height:100%;display:block;background:linear-gradient(90deg,#d7aaa2,#a96f72);border-radius:8px}.dim-val{text-align:right;color:#ae8a83;font-size:11px}.dim-note{font-size:11px;color:#a2948e;margin-top:3px}.highlight{background:#faf4f0;border-radius:14px;padding:16px;margin-top:12px}.highlight b{font-size:12px;color:var(--rose);font-weight:500}.highlight p{margin-top:5px}.tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.tag{border:1px solid var(--line);color:#8e716d;border-radius:30px;padding:4px 10px;font-size:11px}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}.actions .btn{flex:1;min-width:150px}.fine{font-size:11px;color:#a69a94;text-align:center;margin-top:18px}.card-preview{display:none;margin-top:16px;background:#fcf7f1;border:1px solid #eaded4;border-radius:18px;padding:24px;text-align:center}.card-preview.show{display:block}.card-preview .cname{font:500 23px 'Noto Serif SC',serif;margin:11px 0}.toast{position:fixed;bottom:22px;left:50%;transform:translate(-50%,15px);opacity:0;background:#514541;color:white;border-radius:30px;padding:9px 16px;font-size:12px;transition:.2s;pointer-events:none}.toast.show{opacity:1;transform:translate(-50%,0)}@media(max-width:460px){.shell{width:min(100% - 22px,680px);padding-top:16px}.panel{border-radius:18px;padding:22px 19px}.nav .btn{min-width:0;flex:1}.dim-row{grid-template-columns:88px 1fr 28px;gap:8px}}
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#f8f5fb">
+  <meta name="description" content="从12个真实关系情境，观察你的相处需要，获得伴侣画像与可执行的沟通建议。">
+  <title>潜意识伴侣契合度测试 · 关系观察手册</title>
+  <link rel="stylesheet" href="./quiz.css?v=20261016-2">
+  <script src="./config.js"></script>
+  <script type="module" src="./quiz.js?v=20261016-2"></script>
+</head>
+<body>
+  <main class="shell">
+    <header class="masthead"><a href="./" aria-label="返回测试首页">关系观察手册<span class="brand-dot"></span></a><span>LOVE, IN REAL LIFE</span></header>
+    <section id="gate" class="gate panel">
+      <div class="edition">亲密关系观察 · 第二辑</div>
+      <div id="gateArt" class="gate-art" aria-hidden="true"></div>
+      <p class="eyebrow">那些没有说出口的需要</p>
+      <h1 class="gate-title">潜意识伴侣<br>契合度测试</h1>
+      <p class="gate-intro">你想靠近的那个人，<br>也能接住你的真实需要吗？</p>
+      <div class="feature-row"><span>12 个真实情境</span><i></i><span>6 种伴侣画像</span><i></i><span>具体相处建议</span></div>
+      <form id="gateForm" class="gate-form">
+        <label for="password">输入你购买后收到的测试密码</label>
+        <input id="password" type="text" placeholder="例如 XXXX-XXXX-XXXX" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="40" required>
+        <button id="begin" class="btn primary" type="submit">验证密码，开始测试 <span aria-hidden="true">↗</span></button>
+        <p id="gateError" class="form-status" role="status" aria-live="polite"></p>
+      </form>
+      <p class="access-note">店铺售价 ¥6.99 · 每个密码最多开始 5 次<br>开始后刷新可继续本次答题，无需重复消耗次数</p>
+      <button id="lastResult" class="text-button hidden" type="button">查看本设备上次的结果 →</button>
+      <p id="previewNotice" class="preview-notice hidden"></p>
+      <p class="fine-print">依据本次选择提供关系观察与相处建议，非临床心理测评。</p>
+    </section>
 
-.history-card{position:relative;overflow:hidden;margin:22px 0;padding:22px;border-radius:18px;background:linear-gradient(135deg,#f6f0fb,#fcf9ff 58%,#f4eef8);border:1px solid #e9e0f1;text-align:left}.history-card:after{content:'♡';position:absolute;right:16px;top:4px;font:64px 'Noto Serif SC',serif;color:#e5d9ef;opacity:.7}.history-kicker{font-size:10px;letter-spacing:.16em;color:#9179aa}.history-title{position:relative;z-index:1;margin:7px 0 10px;font:500 19px/1.55 'Noto Serif SC',serif;color:#554467}.history-card p{position:relative;z-index:1;margin:0;color:#71677b;font-size:13px;line-height:1.85}.history-card .history-caveat{margin-top:9px;color:#9a90a3;font-size:11px}.history-sources{position:relative;z-index:1;margin-top:8px;color:#9a90a3;font-size:10px}.history-sources a{color:#8d78a5;text-decoration:underline;text-underline-offset:2px}.history-bridge{margin-top:12px!important;padding-top:11px;border-top:1px solid #e6ddec;color:#7957a8!important}.result-lead{display:inline-flex;align-items:center;gap:7px;margin:4px auto 10px;padding:5px 11px;border-radius:30px;background:#f5f0fa;color:#8a70a7;font-size:11px}.dimension-visual{margin:19px 0 24px;padding:17px 18px;border-radius:16px;background:#fbf9fd;border:1px solid #eee8f4;text-align:left}.dimension-visual h2{margin:0 0 3px;font:500 16px 'Noto Serif SC',serif;color:#59486d}.dimension-caption{margin:0 0 13px;color:#a097aa;font-size:11px}.axis-line{display:grid;grid-template-columns:90px 1fr 24px;align-items:center;gap:12px;margin:11px 0}.axis-count{text-align:right;color:#a69ab5;font-size:10px}.axis-line span{color:#72677e;font-size:12px}.axis-track{height:6px;border-radius:10px;background:#eeeaf4;overflow:hidden}.axis-track i{display:block;height:100%;border-radius:10px;background:linear-gradient(90deg,#cdbce4,#8565ad)}.axis-line.primary span{color:#7957a8;font-weight:600}.details-report{margin:5px 0 18px;border-top:1px solid #eee8f2;border-bottom:1px solid #eee8f2}.details-report summary{padding:14px 2px;color:#806b9e;font-size:13px;cursor:pointer;list-style:none}.details-report summary::-webkit-details-marker{display:none}.details-report summary:after{content:'＋';float:right;color:#a997bd}.details-report[open] summary:after{content:'－'}.details-report .section:first-child{border-top:0}.history-spark{display:flex;gap:5px;margin:14px 0 4px}.history-spark i{width:6px;height:6px;border-radius:50%;background:#c4b0dd}.history-spark i:nth-child(2){opacity:.55}.history-spark i:nth-child(3){opacity:.3}
-</style><style>
-/* revised palette: quiet sage, paper white, and ink */
-:root{--paper:#f2f1ea;--card:#fffefa;--ink:#3f4842;--muted:#777f78;--rose:#6f8274;--rose-light:#dce5dc;--line:#e3e5dc;--hint:#a6afa6;--shadow:0 14px 40px #38463d12}
-.field:focus{border-color:#91a397;box-shadow:0 0 0 3px #91a3971a}.btn:hover{background:#596f61}.progress{background:#e6e8df}.progress i{background:linear-gradient(90deg,#9db3a1,#6f8274)}.answer:hover{border-color:#9aab9e;background:#f8faf6}.answer.selected{background:#f0f5ef;box-shadow:0 0 0 2px #6f827412}.bar{background:#e9ebe4}.bar i{background:linear-gradient(90deg,#b9c9b8,#6f8274)}.dim-val{color:#718679}.highlight{background:#f3f6f0}.tag{color:#62776a}.card-preview{background:#f7f7f0;border-color:#dfe4d9}
-.scene-list{display:grid;gap:10px;margin-top:15px}.scene-item{padding:14px 15px;border-radius:13px;background:#f6f7f1;border:1px solid #e7e9e0}.scene-label{font-size:11px;letter-spacing:.08em;color:#718679;margin-bottom:5px}.scene-answer{font-family:'Noto Serif SC',serif;color:#48554b;font-size:15px}.scene-reading{font-size:12px;color:#7c857d;margin-top:6px;line-height:1.7}.section .subline{font-size:12px;color:#939c93;margin-top:8px}.section>p+p{margin-top:10px}.guide-box{margin-top:12px;padding:15px 16px;border-radius:14px;background:#f6f7f1;border-left:3px solid #9caf9f;color:#67736a;font-size:13px;line-height:1.85}.guide-box p{font-size:13px;color:#67736a}.guide-label{display:block;font-size:10px;letter-spacing:.1em;color:#7e9384;margin-bottom:5px}.guide-phrase{display:block;margin-top:9px;padding:9px 11px;background:#fffefa;border-radius:9px;color:#53665a;font-family:'Noto Serif SC',serif}
-.match-basis{margin:2px auto 4px;max-width:560px;padding:17px 18px;border-radius:14px;background:#f2f6f0;text-align:left}.match-basis strong{display:block;font:500 13px 'Noto Serif SC',serif;color:#63796a;margin-bottom:6px}.match-basis p{font-size:13px;color:#707c72;margin:0;line-height:1.8}
-.card-preview{background:#f7f5fc;border:1px solid #e6def4;padding:14px}.share-art{position:relative;overflow:hidden;text-align:center;background:linear-gradient(145deg,#fff 0%,#fbfaff 60%,#f3effb 100%);border:1px solid #e5ddf2;border-radius:18px;padding:30px 22px 25px;box-shadow:0 9px 24px #59477b12}.share-art:before,.share-art:after{content:'';position:absolute;width:150px;height:150px;border-radius:50%;background:#eee8fa;opacity:.62}.share-art:before{top:-85px;left:-75px}.share-art:after{right:-95px;bottom:-90px}.share-brand,.share-kicker,.share-title,.share-line,.share-footer{position:relative;z-index:1}.share-brand{color:#9582b6;font-size:10px;letter-spacing:.16em}.share-kicker{margin-top:23px;color:#9582b6;font-size:12px;letter-spacing:.12em}.share-title{font:600 clamp(25px,7vw,36px)/1.45 'Noto Serif SC',serif;color:#7957a8;margin:7px 0 17px}.share-line{max-width:460px;margin:0 auto;color:#655875;font:500 15px/1.8 'Noto Serif SC',serif}.share-divider{width:38px;height:2px;margin:18px auto;background:#d7caeb;position:relative;z-index:1}.share-footer{font-size:10px;line-height:1.8;color:#a194b2;letter-spacing:.03em}
-</style><style>
-/* unified lavender-and-white palette */
-:root{--paper:#f7f5fc;--card:#fff;--ink:#433c50;--muted:#817991;--rose:#7957a8;--rose-light:#eee8fa;--line:#e8e2f0;--hint:#a99fba;--shadow:0 14px 40px #54416d12}
-body{background:radial-gradient(ellipse at 18% 0%,#fff 0,transparent 48%),var(--paper);color:var(--ink)}
-.panel{background:#fff;border-color:#ebe6f2}.field:focus{border-color:#b4a0d2;box-shadow:0 0 0 3px #b4a0d21a}.btn{background:#7957a8}.btn:hover{background:#65448e}.progress{background:#eee9f4}.progress i{background:linear-gradient(90deg,#c5b2e2,#7957a8)}
-.gate-panel{width:min(100%,560px);margin:0 auto;text-align:center}.uses-left{color:#8c78a7;font-size:12px;margin:18px 0 10px}.start-btn{width:100%;max-width:360px;margin-top:12px}
-.actions{display:grid;grid-template-columns:repeat(4,minmax(0,1fr))}.actions .btn{min-width:0;padding:12px 8px;font-size:14px;white-space:nowrap}@media(max-width:700px){.actions{grid-template-columns:repeat(2,minmax(0,1fr))}}.modal{position:fixed;inset:0;z-index:20;display:grid;place-items:center;padding:22px}.modal.hidden{display:none!important}.modal-scrim{position:absolute;inset:0;background:#2f263a77;backdrop-filter:blur(3px)}.modal-card{position:relative;width:min(100%,390px);padding:32px 26px 24px;border:1px solid #e5ddf2;border-radius:22px;background:#fff;box-shadow:0 20px 70px #2a1e3b30;text-align:center}.modal-close{position:absolute;right:14px;top:9px;border:0;background:transparent;color:#978ba5;font-size:27px;line-height:1;cursor:pointer;padding:8px}.modal-icon{width:42px;height:42px;margin:0 auto 12px;display:grid;place-items:center;border-radius:50%;background:#f3eefb;color:#8a6db2;font-size:22px}.modal-card h2{margin:0 0 10px;font:500 22px 'Noto Serif SC',serif;color:#5c4778}.modal-card p{margin:0;color:#6f6678;font-size:14px;line-height:1.9}.modal-card strong{color:#7957a8;font-size:17px}.modal-card .modal-note{margin-top:9px;color:#988ea2;font-size:12px}.review-label{margin-top:18px;text-align:left;font-size:11px;color:#88769f}.review-sample{min-height:88px;margin-top:6px;padding:13px 14px;border:1px solid #e8e0f2;border-radius:12px;background:#faf8fd;color:#5a4d69;text-align:left;font-size:13px;line-height:1.8;overflow-wrap:anywhere}.review-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:12px}.review-actions .btn{padding:11px 10px}.review-actions .btn.secondary{border-color:#e4dced;color:#725b90}.modal-done{width:100%;margin-top:21px}
-.answer{background:#fff;border-color:#e8e2f0}.answer:hover{border-color:#c1addf;background:#fbf9fe}.answer.selected{border-color:#9474bd;background:#f5f0fb;box-shadow:0 0 0 2px #7957a812}.hint{color:#aa9dbd}.letter{color:#7957a8}
-.result-intro{color:#716879}.section h2{color:#59486d}.section p{color:#766d80}.bar{background:#eeeaf4}.bar i{background:linear-gradient(90deg,#cbb9e6,#7957a8)}.dim-name{color:#655a70}.dim-val{color:#8569aa}.dim-note,.section .subline{color:#a297b1}.tag{color:#765e96;border-color:#e4dced;background:#fcfaff}
-.scene-item{background:#faf8fd;border-color:#ece6f3}.scene-label{color:#917bb0}.scene-answer{color:#51445f}.scene-reading{color:#80758b}.guide-box{background:#f7f4fb;border-left-color:#b9a6d6;color:#70647e}.guide-box p{color:#70647e}.guide-label{color:#856da8}.guide-phrase{background:#fff;color:#604c79}.match-basis{background:#f6f2fb}.match-basis strong{color:#7957a8}.match-basis p{color:#746982}.match-person{font:500 18px 'Noto Serif SC',serif!important;color:#7957a8!important;margin:7px 0!important}.partner-checks{margin-top:10px;padding-top:12px;border-top:1px solid #e8e0f2}.partner-checks strong{font-size:13px!important}.partner-checks ul{margin:8px 0 0;padding-left:20px;text-align:left;color:#746982;font-size:13px;line-height:1.85}.partner-checks li+li{margin-top:5px}.highlight{background:#f6f2fb}.fine{color:#a298ae}.card-preview{background:#f7f5fc;border-color:#e6def4}
-@media(max-width:520px){.path-grid{grid-template-columns:1fr}.story-card{padding:16px}.shell{width:calc(100% - 22px);padding:14px 0 30px}.brand{margin-bottom:16px}.panel{padding:22px 18px;border-radius:17px}.gate{min-height:calc(100svh - 66px)}.gate .panel{padding:34px 22px}.title{font-size:clamp(25px,7vw,32px)}.quiz-head{margin:10px 2px 18px}.quiz-top{display:grid;gap:4px;font-size:11px}.question{font-size:23px;margin-bottom:18px}.answer{padding:13px 12px}.nav{gap:9px;margin-top:18px}.nav .btn{min-width:0;padding:12px 10px;flex:1}.result-name{font-size:28px}.section{padding:19px 0}.section h2{font-size:17px}.dim-row{grid-template-columns:86px minmax(0,1fr) 34px;gap:7px}.actions{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.actions .btn{width:100%}.card-preview{padding:10px}.share-art{padding:25px 17px 22px}.modal{padding:16px}.modal-card{padding:29px 21px 20px}.review-actions{grid-template-columns:1fr 1fr}}
-.generated-image-preview{display:block;width:min(100%,560px);height:auto;margin:12px auto;border:1px solid #eee5df;border-radius:16px;-webkit-touch-callout:default}.image-share-note{margin:12px 0!important;padding:12px 14px;background:#faf4f0;border-radius:12px;color:#716560;font-size:13px}.save-image-modal{position:fixed;inset:0;z-index:40;background:#211a2add;display:flex;flex-direction:column;padding:12px}.save-image-modal.hidden{display:none!important}.save-image-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:4px 2px 12px;color:#fff;font-size:14px}.save-image-close{width:40px;height:40px;border:0;border-radius:50%;background:#ffffff24;color:#fff;font-size:26px;line-height:1}.save-image-scroll{flex:1;min-height:0;overflow:auto;overscroll-behavior:contain;border-radius:14px;background:#fff;-webkit-overflow-scrolling:touch}.save-image-scroll img{display:block;width:min(100%,560px);height:auto;margin:0 auto;-webkit-touch-callout:default;touch-action:pan-y;user-select:auto}.save-image-tip{padding:10px 8px 2px;color:#fff;text-align:center;font-size:12px}</style></head>
-<body><main class="shell"><div class="brand">关系观察手册</div>
-<section id="gate" class="gate"><div class="panel"><div class="eyebrow">A gentle relationship quiz</div><h1 class="title">你喜欢的类型，<br>真的是适合你的类型吗？</h1><p class="sub">12 个关系情境，看看你的偏好与相处需要</p><form id="gateForm"><input id="password" class="field" type="password" inputmode="numeric" placeholder="请输入访问密码" autocomplete="off"><button class="btn" type="submit">验证密码</button><div id="gateError" class="error" aria-live="polite"></div></form></div></section>
-<section id="start" class="hidden"><div class="panel gate-panel"><div class="eyebrow">关系观察手册</div><h1 class="title">准备好认识自己的关系偏好了吗？</h1><p class="sub">共 12 题，选择最接近你真实反应的答案。选完会自动进入下一题，也可以返回修改。</p><p id="usesLeft" class="uses-left"></p><button id="startTest" class="btn start-btn">开始测试</button></div></section>
-<section id="quiz" class="hidden"><header class="quiz-head"><div class="quiz-top"><span>你喜欢的类型，真的是适合你的类型吗？</span><span id="counter"></span></div><div class="progress"><i id="progress"></i></div></header><div class="panel"><div class="eyebrow">关系情境</div><h1 id="question" class="question"></h1><div id="answers" class="answers"></div><div class="nav"><button id="prev" class="btn secondary">上一题</button><button id="next" class="btn">下一题</button></div></div></section>
-<section id="result" class="hidden"><div class="panel"><header class="result-head"><div class="eyebrow">你的关系偏好画像</div><h1 id="resultName" class="result-name"></h1><p id="overview" class="result-intro"></p><div class="match-basis"><strong>更适合你的相处对象</strong><p id="partnerName" class="match-person"></p><p id="matchBasis"></p><div class="partner-checks"><strong>下次相处，可以留意这三件事</strong><ul id="partnerChecks"></ul></div></div><div class="story-card"><div class="story-label">你可能熟悉的关系瞬间</div><p id="storyLine"></p></div><article class="history-card"><div class="history-kicker">史书里的关系片段 · 唐高宗与武则天</div><div class="history-spark"><i></i><i></i><i></i></div><h2 class="history-title">一次重逢，能不能成为重新选择的开始？</h2><p>《旧唐书》记下了高宗在感业寺见到武氏、后来将她召回宫中的传统记载。史书留下了事件，却没有足够材料替我们确认两人私下的情感。</p><p class="history-caveat">这里借的是一个历史节点，不把传说当作爱情证据。真正适合自己的关系，仍要看彼此是否愿意持续选择。</p><div class="history-sources">史料参考：<a href="https://dudianji.com/book/%E6%97%A7%E5%94%90%E4%B9%A6/%E5%8D%B7%E5%85%AD%C2%B7%E6%9C%AC%E7%BA%AA%E7%AC%AC%E5%85%AD" target="_blank" rel="noopener">《旧唐书》相关记载</a> · <a href="https://lishiwenhua.snnu.edu.cn/__local/F/DB/37/442608EE2D4D2BA8A04BDB2F02B_5E464A60_4BAB9.pdf?e=.pdf" target="_blank" rel="noopener">史学讨论</a></div><p id="historyBridge" class="history-bridge"></p></article></header><section class="dimension-visual"><h2>这次选择里，比较突出的相处线索</h2><p class="dimension-caption">只呈现本次答题分布，帮助你观察，不代表固定人格分数。</p><div id="axisVisual"></div></section><details class="details-report"><summary>展开完整关系观察报告</summary><div class="section"><h2>01　容易被什么吸引</h2><p id="attraction"></p></div><div class="section"><h2>02　你在关系里的反应</h2><p id="behavior"></p></div><div class="section"><h2>03　关系里的三个片段</h2><p>把心动、分歧和疲惫放在一起看，更容易看见你如何靠近，也如何照顾自己。</p><div id="sceneRead" class="scene-list"></div></div><div class="section"><h2>04　你的关系节奏</h2><p>以下是本次选择呈现出的几条观察线索。它们会随关系对象和当下处境变化，不是固定人格标签。</p><div id="dimensions" class="path-grid"></div></div><div class="section"><h2>05　你可能更需要的相处条件</h2><p id="needs"></p><div id="needDetail" class="guide-box"></div></div><div class="section"><h2>06　这种相处方式何时会让你累</h2><p id="stress"></p><div id="stressDetail" class="guide-box"></div></div><div class="section"><h2>07　可以尝试的相处办法</h2><p id="fit"></p><div id="fitDetail" class="guide-box"></div></div><div class="section"><h2>08　这份结果是怎样形成的</h2><p id="evidence"></p><div id="topTags" class="tags"></div><p id="evidenceDetail" class="subline"></p></div></div></details><div class="actions"><button id="share" class="btn">生成分享卡</button><button id="restart" class="btn secondary">重新测试</button><button id="reviewGift" class="btn">好评有礼</button><button id="saveResult" class="btn secondary">保存我的测试结果</button></div><div id="cardPreview" class="card-preview"></div><p class="fine">本测试用于轻量自我观察。结果依据本次选择归纳，不是标准化心理测量或关系预测。</p></div></section>
-</main><div id="toast" class="toast" role="status"></div><div id="reviewModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="reviewTitle"><div class="modal-scrim" data-close-modal></div><div class="modal-card"><button class="modal-close" type="button" aria-label="关闭" data-close-modal>×</button><div class="modal-icon">♡</div><h2 id="reviewTitle">好评有礼</h2><p>感谢你完成这次测试。留下真实评价并截图联系客服，即可领取 <strong>1 元返现</strong>。</p><div class="review-label">真实体验表达参考 · 随机展示一条</div><div id="reviewSample" class="review-sample" aria-live="polite"></div><p class="modal-note">请只在内容符合你真实体验时使用，也可以写下自己的感受。评价内容不影响领取。</p><div class="review-actions"><button id="newReview" class="btn secondary" type="button">换一条</button><button id="copyReview" class="btn" type="button">复制这条</button></div><p class="modal-note">完成评价后，把截图发送给店铺客服即可。</p></div></div><div id="saveImageModal" class="save-image-modal hidden" role="dialog" aria-modal="true" aria-label="图片预览"><div class="save-image-toolbar"><span id="saveImageTitle">长按图片保存到手机相册</span><button id="closeSaveImage" class="save-image-close" type="button" aria-label="关闭">×</button></div><div id="saveImageScroll" class="save-image-scroll"><img id="saveResultImagePreview" alt="关系观察图片"></div><div id="saveImageTip" class="save-image-tip">如果没有弹出保存菜单，请长按图片中间区域。</div></div>
-<script src="./config.js"></script>
-<script>
-let validatedCode='';let startPending=null,startAccepted=false;let generatedImageUrl='';
-let idx=0,answers=[],advanceTimer=null,counts={},lastReviewIndex=-1;
-let dims = {},questions = {},profiles = {},expandedNarratives = {},partnerMatches = {},relationshipTypes = {},relationshipReports = {},relationshipAxes = {},shareLines = {},reviewSamples = {},needReadings = {},deepGuidance = {},sceneReadings = {};const $=s=>document.querySelector(s);const cloudConfig=window.RELATIONSHIP_QUIZ_CONFIG||{};const cloudReady=Boolean(cloudConfig.supabaseUrl&&cloudConfig.publishableKey&&!cloudConfig.supabaseUrl.includes('YOUR_PROJECT_REF')&&!cloudConfig.publishableKey.includes('YOUR_SUPABASE'));async function api(path,body){let requestBody=body;let method=body?'POST':'GET';let target=path;if(cloudReady){if(path.startsWith('/api/access?code=')){requestBody={code:new URL(path,location.origin).searchParams.get('code')};path='/api/access';method='POST'}const headers=requestBody?{'Content-Type':'application/json'}:{};headers.apikey=cloudConfig.publishableKey;target=cloudConfig.supabaseUrl.replace(/\/$/,'')+'/functions/v1/quiz-api'+path;const res=await fetch(target,{method,headers,body:requestBody?JSON.stringify(requestBody):undefined});const data=await res.json();if(!res.ok)throw new Error(data.error||'请求暂时无法完成，请稍后重试。');return data}const res=await fetch(target,{method,headers:requestBody?{'Content-Type':'application/json'}:{},body:requestBody?JSON.stringify(requestBody):undefined});const data=await res.json();if(!res.ok)throw new Error(data.error||'请求暂时无法完成，请稍后重试。');return data}
-function updateStart(remaining){$('#usesLeft').textContent=`这个密码还可开始 ${remaining} 次测试。`;$('#startTest').disabled=remaining<1;$('#startTest').textContent=remaining?'开始测试':'次数已用完'}
-$('#gateForm').addEventListener('submit',async e=>{e.preventDefault();const input=$('#password'),button=$('#gateForm button');button.disabled=true;$('#gateError').textContent='正在验证…';try{const data=await api('/api/access?code='+encodeURIComponent(input.value));if(data.content)({dims,questions,profiles,expandedNarratives,partnerMatches,relationshipTypes,relationshipReports,relationshipAxes,shareLines,reviewSamples,needReadings,deepGuidance,sceneReadings}=data.content);else throw new Error('测试内容尚未配置，请稍后再试。');validatedCode=input.value;$('#gate').classList.add('hidden');$('#start').classList.remove('hidden');$('#gateError').textContent='';updateStart(data.remaining)}catch(err){$('#gateError').textContent=err.message;input.select()}finally{button.disabled=false}});
-$('#startTest').onclick=()=>{const button=$('#startTest');button.disabled=true;button.textContent='正在确认…';idx=0;answers=Array(questions.length).fill(null);startAccepted=false;$('#start').classList.add('hidden');$('#quiz').classList.remove('hidden');renderQuestion();startPending=api('/api/start',{code:validatedCode}).then(data=>{updateStart(data.remaining);startAccepted=true}).catch(err=>{$('#quiz').classList.add('hidden');$('#start').classList.remove('hidden');$('#usesLeft').textContent=err.message;button.textContent='开始测试';button.disabled=err.message.includes('次数已用完');idx=0;answers=Array(questions.length).fill(null);showToast('暂时无法开始，请稍后重试')}).finally(()=>{startPending=null})};function renderQuestion(){const item=questions[idx];$('#counter').textContent=`${String(idx+1).padStart(2,'0')} / ${questions.length}`;$('#progress').style.width=`${(idx+1)/questions.length*100}%`;$('#question').textContent=item.q;$('#answers').innerHTML='';item.a.forEach((a,i)=>{const b=document.createElement('button');b.className='answer'+(answers[idx]===i?' selected':'');b.innerHTML=`<span class="answer-text"><span class="letter">${'ABCD'[i]}</span><span>${a[0]}</span></span><small class="hint">＋${dims[a[1]]}</small>`;b.onclick=()=>{clearTimeout(advanceTimer);answers[idx]=i;renderQuestion();if(idx<questions.length-1)advanceTimer=setTimeout(()=>{idx++;renderQuestion()},170);else advanceTimer=setTimeout(finish,170)};$('#answers').appendChild(b)});$('#prev').disabled=idx===0;$('#next').disabled=answers[idx]===null;$('#next').textContent=idx===questions.length-1?'查看结果':'下一题'}
-$('#prev').onclick=()=>{clearTimeout(advanceTimer);if(idx>0){idx--;renderQuestion()}};$('#next').onclick=()=>{clearTimeout(advanceTimer);if(answers[idx]===null)return;if(idx<questions.length-1){idx++;renderQuestion()}else finish()};
-function resolveRelationshipType(){
- const groups={approach:['response','initiative'],clarity:['reassurance','communication'],ease:['ease','stability'],space:['boundary','uncertainty']};
- const score=Object.fromEntries(Object.entries(groups).map(([group,keys])=>[group,keys.reduce((sum,key)=>sum+(counts[key]||0),0)]));
- const sceneScore=Object.fromEntries(Object.keys(groups).map(group=>[group,0]));
- const groupFor=Object.fromEntries(Object.entries(groups).flatMap(([group,keys])=>keys.map(key=>[key,group])));
- [1,5,11].forEach(index=>{const answer=answers[index];if(answer!==null){const key=questions[index].a[answer][1];sceneScore[groupFor[key]]++}});
- const order=Object.keys(groups).sort((a,b)=>score[b]-score[a]||sceneScore[b]-sceneScore[a]);
- const key=order[0]+'_'+order[1];
- return {key,type:relationshipTypes[key]||relationshipTypes.approach_clarity,order,score};
-}
-async function finish(){
- if(startPending)await startPending;
- if(!startAccepted)return;
- counts=Object.fromEntries(Object.keys(dims).map(key=>[key,0]));
- answers.forEach((answer,index)=>{if(answer!==null)counts[questions[index].a[answer][1]]++});
- const sorted=Object.keys(counts).sort((a,b)=>counts[b]-counts[a]);
- const lead=sorted[0],p=profiles[lead],deepDims=sorted.slice(0,2);
- const resolved=resolveRelationshipType(),order=resolved.order;
- resultType=resolved.type;
- const report=relationshipReports[resolved.key]||{};
- $('#quiz').classList.add('hidden');$('#result').classList.remove('hidden');
- $('#resultName').textContent=report.label||resultType.title;
- $('#overview').textContent=report.overview||resultType.overview;
- $('#partnerName').textContent=resultType.title;
- $('#matchBasis').textContent=report.why||resultType.why;
- $('#partnerChecks').innerHTML=(report.checks||[]).map(item=>'<li>'+item+'</li>').join('');
- $('#storyLine').textContent=report.story||resultType.story;
- const historyBridges={approach_clarity:'放回今天看，比戏剧性的重逢更值得留意的是：你表达靠近时，对方有没有用清楚的回应和实际行动接住。',approach_ease:'心动可以从一次靠近开始，能不能走远，还要看普通日子里是否都愿意安排下一次相见。',approach_space:'主动靠近不是替对方做决定；让关系继续的前提，是两个人都能说出自己的意愿。',clarity_approach:'关系的转折常常始于一次开口。对你来说，重要的不只是听到态度，也要看后续行动是否一致。',clarity_ease:'能把话说开是开始，谈过之后能不能一起回到自在的日常，也同样重要。',clarity_space:'留时间观察没有问题；清楚说出各自的期待，能让这段时间不必靠猜测填满。',ease_approach:'浪漫的节点很动人，日常里一次被认真落实的邀约，也能让人感到自己被放在心上。',ease_clarity:'舒服的关系不等于从不争执，而是有分歧时能说清，之后也愿意一起调整。',ease_space:'亲近不必占满彼此生活。能尊重空间，也持续兑现约定，日常才有安心的余地。',space_approach:'慢一点是你的选择；对方能否尊重这个速度，同时持续表达真实兴趣，是值得观察的信号。',space_clarity:'观察不是为了等一个完美答案，而是看对方的话和行动能否经得起时间核对。',space_ease:'慢慢熟悉可以很浪漫，前提是相处虽不匆忙，彼此仍愿意清楚地安排下一次靠近。'};
- $('#historyBridge').textContent=historyBridges[resolved.key]||historyBridges.approach_clarity;
- const axisOrder=['approach','clarity','ease','space'];
- $('#axisVisual').innerHTML=axisOrder.map((axis,index)=>{const value=resolved.score[axis]||0;return '<div class="axis-line '+(index<2?'primary':'')+'"><span>'+relationshipAxes[axis].name+'</span><div class="axis-track" aria-label="'+relationshipAxes[axis].name+'，本次选择 '+value+' 次"><i style="width:'+Math.round(value/12*100)+'%"></i></div><b class="axis-count">'+value+'</b></div>'}).join('');
- $('#attraction').innerHTML=deepDims.map(key=>'<p>'+expandedNarratives[key].attraction+'</p>').join('');
- $('#behavior').innerHTML=deepDims.map(key=>'<p>'+expandedNarratives[key].behavior+'</p>').join('');
- $('#stress').textContent=p.stress;$('#fit').textContent=p.fit;
- $('#needs').textContent=deepDims.map(key=>needReadings[key]).join(' ');
- $('#needDetail').innerHTML=deepDims.map(key=>'<p><span class="guide-label">生活里的样子 · '+dims[key]+'</span>'+deepGuidance[key].need+'</p>').join('');
- $('#stressDetail').innerHTML=deepDims.map(key=>'<p><span class="guide-label">'+dims[key]+' · 可能发生的具体时刻</span>'+deepGuidance[key].stress+'</p>').join('');
- $('#fitDetail').innerHTML=deepDims.map(key=>'<p><span class="guide-label">'+dims[key]+' · 可以从一小步开始</span>'+deepGuidance[key].practice+'<span class="guide-phrase">'+deepGuidance[key].phrase+'</span></p>').join('');
- const roles=['最清晰的线索','一起构成画像','也会影响相处','会随情境起伏'];
- $('#dimensions').innerHTML=order.map((group,index)=>'<article class="path-card '+(index===0?'primary':index===1?'secondary':'context')+'"><strong>'+relationshipAxes[group].name+'</strong><small>'+roles[index]+'</small><p>'+relationshipAxes[group].description+'</p></article>').join('');
- const sceneIndices=[1,5,11],stages=['关系刚开始时','遇到分歧时','感到疲惫时'];
- $('#sceneRead').innerHTML=sceneIndices.map((index,sceneIndex)=>{const chosen=questions[index].a[answers[index]],dim=chosen[1];return '<article class="scene-item"><div class="scene-label">'+stages[sceneIndex]+' · '+questions[index].q+'</div><div class="scene-answer">你的选择：「'+chosen[0]+'」</div><div class="scene-reading">这透露出：'+sceneReadings[dim]+'</div></article>'}).join('');
- $('#evidence').textContent='这份画像综合了你在靠近、表达、相处节奏和个人空间上的选择，也对照了关系刚开始、出现分歧和感到疲惫时的具体反应。它描述的是本次答题里较连贯的一条相处路线，不是给你定型。';
- $('#topTags').innerHTML='<span class="tag">主要线索 · '+relationshipAxes[order[0]].name+'</span><span class="tag">补充线索 · '+relationshipAxes[order[1]].name+'</span>';
- $('#evidenceDetail').textContent='如果你的关系经历、对象或当下状态改变，答案也可能不同。可以把报告当成一面观察镜：留下有共鸣的部分，也允许自己和结果不完全一样。';
- window.scrollTo({top:0,behavior:'smooth'});
-}
-function showToast(message){const toast=$('#toast');toast.textContent=message;toast.classList.add('show');clearTimeout(showToast.timer);showToast.timer=setTimeout(()=>toast.classList.remove('show'),1900)}
-function fallbackCopy(text){const input=document.createElement('textarea');input.value=text;input.style.position='fixed';input.style.opacity='0';document.body.appendChild(input);input.select();try{document.execCommand('copy');showToast('这条评价已复制')}catch{showToast('复制失败，请手动选择文字')}input.remove()}
-const fallbackReviewSamples=[
- '报告写得蛮细的，不是只给一个简单结论。看完之后，对自己在关系里在意什么清楚了一点。',
- '挺有意思的，测出来和我原本想的不完全一样，反而让我多看到了一个角度。',
- '狠狠探索了一下自我哈哈，题目做起来不累，结果也有东西可以慢慢看。',
- '有几段确实挺有共鸣，特别是那些平时不太会注意到的小反应。',
- '整体体感不错，报告给了我一些整理思路，适合最近想了解自己的人做做看。',
- '哈哈哈挺有意思的，尤其是看到自己在不同情境下的反应，感觉还蛮真实。',
- '做完之后和朋友聊了一下彼此的相处习惯，算是多了一个挺好的话题。',
- '页面看着很舒服，题目也比较贴近日常，结果读起来没有被说教的感觉。'
-];
-function showReviewSample(){const target=$('#reviewSample');const samples=Array.isArray(reviewSamples)&&reviewSamples.length?reviewSamples:fallbackReviewSamples;if(!samples.length){target.textContent='欢迎留下你真实的体验感受。';return}let next=Math.floor(Math.random()*samples.length);if(samples.length>1&&next===lastReviewIndex)next=(next+1+Math.floor(Math.random()*(samples.length-1)))%samples.length;lastReviewIndex=next;target.textContent=samples[next]}
-function closeReviewModal(){const modal=$('#reviewModal');modal.classList.add('hidden');document.body.style.removeProperty('overflow')}
-$('#reviewModal .modal-close').addEventListener('click',closeReviewModal);
-$('#reviewGift').onclick=()=>{$('#reviewModal').classList.remove('hidden');document.body.style.overflow='hidden';showReviewSample()};
-$('#newReview').onclick=showReviewSample;
-$('#copyReview').onclick=()=>{const text=$('#reviewSample').textContent.trim();if(!text){showToast('当前没有可复制的内容');return}if(navigator.clipboard?.writeText)navigator.clipboard.writeText(text).then(()=>showToast('这条评价已复制')).catch(()=>fallbackCopy(text));else fallbackCopy(text)};
-$('#reviewModal').addEventListener('click',e=>{if(e.target.closest('[data-close-modal]'))closeReviewModal()});
-$('#reviewModal .modal-card').addEventListener('click',e=>e.stopPropagation());
-document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('#reviewModal').classList.contains('hidden'))closeReviewModal()});
-function showImageFallback(blob,fileName,message){if(generatedImageUrl)URL.revokeObjectURL(generatedImageUrl);generatedImageUrl=URL.createObjectURL(blob);const card=$('#cardPreview');card.replaceChildren();const note=document.createElement('p');note.className='image-share-note';note.textContent=message;const image=document.createElement('img');image.className='generated-image-preview';image.src=generatedImageUrl;image.alt=fileName;image.draggable=false;card.append(note,image);card.classList.add('show');card.scrollIntoView({behavior:'smooth',block:'center'})}
-function showResultImagePopup(dataUrl,title='长按图片保存到手机相册',tip='如果没有弹出保存菜单，请长按图片中间区域。'){const image=$('#saveResultImagePreview');image.src=dataUrl;image.alt=title;$('#saveImageTitle').textContent=title;$('#saveImageTip').textContent=tip;$('#saveImageModal').classList.remove('hidden');document.body.style.overflow='hidden'}
-function closeResultImagePopup(){$('#saveImageModal').classList.add('hidden');document.body.style.removeProperty('overflow')}
-$('#closeSaveImage').onclick=closeResultImagePopup;
-$('#saveImageModal').addEventListener('click',e=>{if(e.target===$('#saveImageModal'))closeResultImagePopup()});
-document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('#saveImageModal').classList.contains('hidden'))closeResultImagePopup()});
-async function shareImageFile(blob,fileName,title,text,instructions){const file=new File([blob],fileName,{type:'image/png'});if(navigator.share){const payload={files:[file],title,text};const canShare=typeof navigator.canShare!=='function'||navigator.canShare(payload);if(canShare){try{await navigator.share(payload);return true}catch(error){if(error.name==='AbortError')return true}}}showImageFallback(blob,fileName,instructions);return false}
-$('#share').onclick=async()=>{const lead=Object.keys(counts).sort((a,b)=>counts[b]-counts[a])[0],match=resultType||partnerMatches[lead],line=resultType?.line||shareLines[lead];await downloadCard(match,line)};
-async function saveResultImage(){
-  const button=$('#saveResult');
-  button.disabled=true;
-  button.textContent='正在整理测试报告…';
-  try{
-    if(document.fonts?.ready) await document.fonts.ready;
-    const lead=Object.keys(counts).sort((a,b)=>counts[b]-counts[a])[0];
-    const sorted=Object.keys(counts).sort((a,b)=>counts[b]-counts[a]);
-    const deepDims=sorted.slice(0,2);
-    const match=resultType||partnerMatches[lead];
-    const resolved=resolveRelationshipType();
-    const report=relationshipReports[resolved.key]||{};
-    const blocks=[];
-    const addText=(text,size=28,color='#655875',align='left',after=26,weight=400)=>{
-      blocks.push({type:'text',text:String(text??''),size,color,align,after,weight});
-    };
-    const addHeading=(text)=>blocks.push({type:'heading',text});
-    addText('关  系  观  察  手  册',25,'#9582b6','center',34,500);
-    addText(report.label||'你的关系观察报告',42,'#554663','center',28,500);
-    addText('更适合你的相处对象',25,'#9582b6','center',8,400);
-    addText(match.title,54,'#7957a8','center',28,600);
-    addText(report.overview||match.overview,29,'#655875','center',32,400);
-    addHeading('为什么这种相处更适合你');
-    addText(report.why||match.why,27);
-    if(report.checks?.length){
-      addHeading('下次相处，可以留意这三件事');
-      report.checks.forEach((item,index)=>addText((index+1)+'. '+item,24,'#70647e','left',14,400));
-    }
-    addHeading('你的关系故事');
-    addText(report.story||match.story,27);
-    addHeading('容易被什么吸引');
-    addText(deepDims.map(key=>expandedNarratives[key].attraction).join('\n'),27);
-    addHeading('你在关系里的反应');
-    addText(deepDims.map(key=>expandedNarratives[key].behavior).join('\n'),27);
-    addHeading('从你的选择看 · 三个关系情境');
-    [1,5,11].forEach(index=>{
-      const chosen=questions[index].a[answers[index]];
-      addText('情境：'+questions[index].q,23,'#917bb0','left',6,500);
-      addText('你的选择：「'+chosen[0]+'」',26,'#51445f','left',5,500);
-      addText('观察：'+sceneReadings[chosen[1]],23,'#80758b','left',24,400);
-    });
-    addHeading('你的关系节奏');
-    resolved.order.forEach((group,index)=>addText(relationshipAxes[group].name+' · '+['最清晰的线索','一起构成画像','也会影响相处','会随情境起伏'][index]+' · '+relationshipAxes[group].description,24,'#70647e','left',18,400));
-    addHeading('你可能更需要的相处条件');
-    addText(deepDims.map(key=>needReadings[key]).join(' '),26);
-    deepDims.forEach(key=>{
-      addText('生活里的样子 · '+dims[key]+'\n'+deepGuidance[key].need,23,'#70647e','left',22,400);
-    });
-    addHeading('这种相处方式何时会让你累');
-    addText(profiles[lead].stress,26);
-    deepDims.forEach(key=>addText(dims[key]+' · 可能发生的具体时刻\n'+deepGuidance[key].stress,23,'#70647e','left',22,400));
-    addHeading('可以尝试的相处办法');
-    addText(profiles[lead].fit,26);
-    deepDims.forEach(key=>addText(dims[key]+' · 可以从一小步开始\n'+deepGuidance[key].practice+'\n「'+deepGuidance[key].phrase+'」',23,'#70647e','left',28,400));
-    addHeading('这份结果是怎样形成的');
-    addText('这份画像综合了你在靠近、表达、相处节奏和个人空间上的选择，也对照了几个具体关系情境。它描述的是本次答题里较连贯的一条相处路线，不是给你定型。',24);
-    addText('如果经历、对象或当下状态改变，答案也可能不同。留下有共鸣的部分，也允许自己和结果不完全一样。',22,'#887b94');
-    addText('趣味自我观察 · 结果仅供参考，不是标准化心理测量或关系预测。',20,'#a194b2','center',0,400);
+    <section id="quiz" class="panel quiz-panel hidden" aria-label="测试题目">
+      <div class="quiz-status"><span id="groupName" class="eyebrow"></span><span id="questionCount"></span></div>
+      <div class="progress-track" role="progressbar" aria-label="答题进度" aria-valuemin="0" aria-valuemax="12" aria-valuenow="0"><i id="progressFill"></i></div>
+      <p id="groupCaption" class="group-caption"></p>
+      <h1 id="question" class="question" tabindex="-1"></h1>
+      <p class="choice-note">选更接近你的一个。没有标准答案，也不用选“表现更好”的那个。</p>
+      <div id="answers" class="answers" role="group" aria-labelledby="question"></div>
+      <nav class="quiz-nav" aria-label="题目切换"><button id="prev" class="btn secondary" type="button">← 上一题</button><button id="next" class="btn primary" type="button">下一题 →</button></nav>
+      <p class="quiz-tip">选择后自动翻页 · 随时可以返回修改</p>
+    </section>
 
-    const measure=document.createElement('canvas').getContext('2d');
-    const maxWidth=870;
-    let y=108;
-    for(const block of blocks){
-      block.y=y;
-      if(block.type==='heading'){y+=82;continue}
-      if(block.type==='bar'){y+=88;continue}
-      measure.font=block.weight+' '+block.size+'px "Noto Sans SC", sans-serif';
-      const lines=[];
-      for(const paragraph of block.text.split('\n')){
-        if(!paragraph){lines.push('');continue}
-        let line='';
-        for(const character of paragraph){
-          if(line&&measure.measureText(line+character).width>maxWidth){lines.push(line);line=character}
-          else line+=character;
-        }
-        if(line)lines.push(line);
-      }
-      block.lines=lines;
-      block.lineHeight=Math.round(block.size*1.72);
-      y+=Math.max(1,lines.length)*block.lineHeight+block.after;
-    }
-    const canvas=document.createElement('canvas');
-    canvas.width=1080;
-    canvas.height=y+95;
-    const ctx=canvas.getContext('2d');
-    ctx.fillStyle='#f7f5fc';ctx.fillRect(0,0,canvas.width,canvas.height);
-    ctx.fillStyle='#eee8fa';ctx.beginPath();ctx.arc(70,110,245,0,Math.PI*2);ctx.fill();
-    ctx.beginPath();ctx.arc(1020,canvas.height-100,270,0,Math.PI*2);ctx.fill();
-    ctx.fillStyle='#fff';ctx.beginPath();ctx.roundRect(42,42,996,canvas.height-84,38);ctx.fill();
-    ctx.strokeStyle='#e5ddf2';ctx.lineWidth=3;ctx.stroke();
-    for(const block of blocks){
-      if(block.type==='heading'){
-        ctx.fillStyle='#7957a8';ctx.font='500 34px "Noto Serif SC", serif';ctx.textAlign='left';
-        ctx.fillText(block.text,104,block.y);
-        ctx.fillStyle='#e6def4';ctx.fillRect(104,block.y+21,872,2);
-        continue;
-      }
-      if(block.type==='bar'){
-        ctx.textAlign='left';ctx.fillStyle='#655875';ctx.font='400 24px "Noto Sans SC", sans-serif';ctx.fillText(block.name,104,block.y+18);
-        ctx.fillStyle='#a194b2';ctx.font='400 19px "Noto Sans SC", sans-serif';ctx.fillText('选择 '+block.count+' 次',104,block.y+49);
-        ctx.fillStyle='#eeeaf3';ctx.beginPath();ctx.roundRect(350,block.y+5,540,14,7);ctx.fill();
-        ctx.fillStyle='#b9a6d6';ctx.beginPath();ctx.roundRect(350,block.y+5,Math.max(2,540*block.pct/100),14,7);ctx.fill();
-        ctx.textAlign='right';ctx.fillStyle='#856da8';ctx.font='400 22px "Noto Sans SC", sans-serif';ctx.fillText(block.pct+'%',972,block.y+19);
-        continue;
-      }
-      ctx.fillStyle=block.color;ctx.font=block.weight+' '+block.size+'px "Noto Sans SC", sans-serif';
-      ctx.textAlign=block.align;
-      const x=block.align==='center'?540:104;
-      block.lines.forEach((line,index)=>ctx.fillText(line,x,block.y+index*block.lineHeight));
-    }
-    const miniTool=window.xhs&&window.xhs.miniTool;
-    if(miniTool&&typeof miniTool.saveImageToPhotosAlbum==='function'){
-      const dataUrl=canvas.toDataURL('image/png');
-      try{
-        let filePath=dataUrl;
-        if(typeof miniTool.writeTempFile==='function'){
-          const tempFile=await miniTool.writeTempFile({data:dataUrl});
-          if(tempFile&&tempFile.filePath)filePath=tempFile.filePath;
-        }
-        await miniTool.saveImageToPhotosAlbum({filePath});
-        showToast('已保存到手机相册');
-      }catch(saveError){
-        console.warn('Native album save unavailable:',saveError);
-        showResultImagePopup(dataUrl);
-        showToast('请在弹出的长图上长按保存');
-      }
-    }else{
-      showResultImagePopup(canvas.toDataURL('image/png'));
-    }
-  }catch(error){
-    if(error.name!=='AbortError')showToast(error.message||'生成失败，请稍后重试');
-  }finally{
-    button.disabled=false;button.textContent='保存我的测试结果';
-  }
-}
-$('#saveResult').onclick=saveResultImage;
-async function downloadCard(match,line){
- const btn=$('#share');btn.disabled=true;btn.textContent='正在生成分享卡…';
- try{
-  const c=document.createElement('canvas'),ctx=c.getContext('2d');c.width=1080;c.height=1350;
-  const report=relationshipReports[resolveRelationshipType().key]||{};
-  ctx.fillStyle='#f7f5fc';ctx.fillRect(0,0,c.width,c.height);
-  ctx.fillStyle='#eee8fa';ctx.beginPath();ctx.arc(70,100,230,0,Math.PI*2);ctx.fill();
-  ctx.beginPath();ctx.arc(1040,1250,245,0,Math.PI*2);ctx.fill();
-  ctx.fillStyle='#fff';ctx.beginPath();ctx.roundRect(48,48,984,1254,42);ctx.fill();
-  ctx.strokeStyle='#e5ddf2';ctx.lineWidth=3;ctx.stroke();ctx.textAlign='center';
-  ctx.fillStyle='#9582b6';ctx.font='25px sans-serif';ctx.fillText('关  系  观  察  手  册',540,205);
-  ctx.fillStyle='#655875';ctx.font='32px serif';ctx.fillText(report.label||'你的关系偏好画像',540,320);
-  ctx.fillStyle='#9582b6';ctx.font='28px sans-serif';ctx.fillText('更适合你的相处对象',540,400);
-  ctx.fillStyle='#7957a8';ctx.font='bold 66px serif';let y=wrap(ctx,match.title,540,515,850,92)+72;
-  ctx.fillStyle='#d7caeb';ctx.fillRect(490,y,100,4);y+=86;
-  ctx.fillStyle='#655875';ctx.font='34px serif';y=wrap(ctx,line,540,y,810,62)+85;
-  ctx.fillStyle='#a194b2';ctx.font='24px sans-serif';ctx.fillText('你喜欢的类型，真的是适合你的类型吗？',540,y);
-  ctx.fillText('趣味自我观察 · 结果仅供参考',540,y+58);
-  ctx.fillStyle='#d7caeb';ctx.fillRect(455,y+115,170,3);
-  showResultImagePopup(c.toDataURL('image/png'),'分享卡 · 长按保存','长按图片保存到相册，再在微信或小红书中选择这张图片发送给朋友。');
- }catch(err){if(err.name!=='AbortError')showToast(err.message||'生成失败，请稍后重试')}
- finally{btn.disabled=false;btn.textContent='生成分享卡'}
-}
-function wrap(ctx,text,x,y,maxWidth,lineHeight){let line='';for(const ch of text){if(ctx.measureText(line+ch).width>maxWidth&&line){ctx.fillText(line,x,y);line=ch;y+=lineHeight}else line+=ch}if(line)ctx.fillText(line,x,y);return y}
-</script></body></html>
+    <section id="result" class="hidden" aria-label="测试结果">
+      <div id="resultBody"></div>
+      <div class="result-actions"><button id="share" class="btn primary" type="button">生成分享卡 ↗</button><button id="saveResult" class="btn secondary" type="button">保存完整结果</button><button id="reviewGift" class="btn secondary" type="button">好评有礼 🎁</button><button id="restart" class="btn secondary" type="button">重新测试</button></div>
+      <p class="fine-print report-footer">愿这份观察，帮你把下一次选择交回自己手里。<br>结果来自本次作答，不预测关系结局。</p>
+    </section>
+    <noscript><p class="panel">请开启浏览器的 JavaScript 功能后使用测试。</p></noscript>
+  </main>
+
+  <div id="reviewModal" class="overlay hidden" role="dialog" aria-modal="true" aria-labelledby="reviewTitle">
+    <div class="dialog">
+      <button class="close-button" data-close="review" type="button" aria-label="关闭好评有礼">×</button>
+      <div class="dialog-glyph" aria-hidden="true">♡</div><h2 id="reviewTitle">好评有礼</h2>
+      <p>留下真实评价后，将截图发给店铺客服，即可领取 <strong>1 元返现</strong>。</p>
+      <p class="small muted">表达参考 · 仅在符合你的真实体验时使用</p>
+      <div id="reviewSample" class="review-sample"></div>
+      <div class="dialog-actions"><button id="newReview" class="btn secondary" type="button">换一条</button><button id="copyReview" class="btn primary" type="button">复制这条</button></div>
+      <p class="small muted">也欢迎写下自己的感受，评价内容不影响领取。</p>
+    </div>
+  </div>
+
+  <div id="imageModal" class="image-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="imageTitle">
+    <div class="image-toolbar"><span id="imageTitle">长按图片保存</span><div><button id="downloadImage" class="image-download" type="button">下载图片</button><button class="close-button" data-close="image" type="button" aria-label="关闭图片预览">×</button></div></div>
+    <div class="image-scroll"><img id="exportImage" alt="本次关系观察图片"></div>
+    <p class="image-tip">手机：长按图片选择保存到相册，再从微信或小红书中选图发送。电脑：点击“下载图片”。</p>
+  </div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+</body>
+</html>

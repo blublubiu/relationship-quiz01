@@ -1,5 +1,6 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { getQuizContent } from "./quiz-content.ts";
+import { CONTENT_VERSION, getPartnerContent } from "./partner-content.ts";
 
 const codeAlphabet = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
 const sessionTtl = 8 * 60 * 60;
@@ -149,6 +150,10 @@ Deno.serve(async (req: Request) => {
 
     if (req.method === "POST" && route === "/api/start") {
       const payload = await readBody(req);
+      const includeContent = payload.content_version !== undefined;
+      if (includeContent && payload.content_version !== CONTENT_VERSION) {
+        return response({ error: "网站已更新，请刷新后再开始。本次没有扣除次数。" }, 409, origin);
+      }
       const code = normalizeCode(payload.code);
       if (code.length !== 12) return response({ error: "密码格式无效，请重新输入。" }, 400, origin);
       let { data, error } = await supabase.rpc("quiz_consume_access_code", {
@@ -165,7 +170,8 @@ Deno.serve(async (req: Request) => {
         }
       }
       if (!data?.ok) return failureResponse(data?.reason ?? "invalid", origin);
-      return response({ ok: true, remaining: data.remaining }, 200, origin);
+      return response({ ok: true, remaining: data.remaining,
+        ...(includeContent ? { content: getPartnerContent() } : {}) }, 200, origin);
     }
 
     if (req.method === "POST" && route === "/api/admin/login") {
