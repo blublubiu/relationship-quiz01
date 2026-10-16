@@ -72,18 +72,6 @@ export async function createReportImage(report) {
   text(r.quote, 30, '#7b608d', 24, { align: 'center', serif: true });
   text(r.keywords.join(' · '), 19, '#a28ab5', 25, { align: 'center' });
   text(r.intro, 24);
-  if (report.stories?.length) {
-    heading('故事插页', '如果这种相处，走进一则故事');
-    text(report.storyMatch || '故事选编', 21, '#a08aa9');
-    if (report.storyClue) text(`从你的选择读起：${report.storyClue.scene}\n“${report.storyClue.choice}”`, 20, '#9a82a9');
-    for (const story of report.stories) {
-      text(story.source, 24, '#795389', 15, { before: 24, serif: true });
-      text(story.situation, 25, '#796187', 15, { serif: true });
-      text(story.body, 22, '#897593', 17);
-      text(story.moment, 22, '#a07999', 27, { serif: true });
-    }
-    text(report.storyNote || '', 17, '#b2a0bb', 21);
-  }
   heading('02', '你真正想被怎样对待？'); text(r.explanation);
   for (const e of report.evidence) card(e.group + ' · ' + e.scene, '你的选择：' + e.choice, e.reading);
   if (report.nuance) card('还有一处选择，值得一起看', report.nuance.scene + '：' + report.nuance.choice, report.nuance.text, '#fcf8f2');
@@ -93,10 +81,16 @@ export async function createReportImage(report) {
   for (const item of r.risks) card('看是否反复发生，也看有没有调整', item.title, item.scene + '\n' + item.consequence, '#fcf6f2');
   heading('04', '这样的 ta，会怎样与你相处？');
   r.help.forEach((item, i) => card(String(i + 1).padStart(2, '0'), item.title, item.body));
-  heading('05', '下一次，可以这样开口');
+  if (report.stories?.length) {
+    heading('05', '在故事里，看见一种相处');
+    text('三则故事，三个关系视角，慢慢读完。', 21, '#a08aa9');
+    for (const story of report.stories) card(story.source, story.situation, story.body + '\n\n' + story.moment);
+    text(report.storyNote || '', 17, '#b2a0bb', 21);
+  }
+  heading('06', '下一次，可以这样开口');
   card('少做一点', r.dont, '试着改成：' + r.do, '#f8f6f2');
   card('这句话可以直接带走', r.script, '记住：' + r.principle);
-  heading('06', '未来一周，把观察变成选择');
+  heading('07', '未来一周，把观察变成选择');
   r.action.forEach((item, i) => text((i + 1) + '. ' + item, 23, '#806a8b', 18));
   text('这份结果怎样形成', 26, '#9378a5', 17, { before: 35, serif: true });
   text(report.methodNote + ' 采用自定义权重交叉比较相处反应与需要，未进行心理量表信效度验证。引用研究仅提供背景，不作为本测试准确性的证明。', 19, '#ac9ab5');

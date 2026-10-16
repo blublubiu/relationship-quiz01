@@ -231,19 +231,6 @@
     text(r.quote, 30, "#7b608d", 24, { align: "center", serif: true });
     text(r.keywords.join(" \xB7 "), 19, "#a28ab5", 25, { align: "center" });
     text(r.intro, 24);
-    if ((_a = report2.stories) == null ? void 0 : _a.length) {
-      heading("\u6545\u4E8B\u63D2\u9875", "\u5982\u679C\u8FD9\u79CD\u76F8\u5904\uFF0C\u8D70\u8FDB\u4E00\u5219\u6545\u4E8B");
-      text(report2.storyMatch || "\u6545\u4E8B\u9009\u7F16", 21, "#a08aa9");
-      if (report2.storyClue) text(`\u4ECE\u4F60\u7684\u9009\u62E9\u8BFB\u8D77\uFF1A${report2.storyClue.scene}
-\u201C${report2.storyClue.choice}\u201D`, 20, "#9a82a9");
-      for (const story of report2.stories) {
-        text(story.source, 24, "#795389", 15, { before: 24, serif: true });
-        text(story.situation, 25, "#796187", 15, { serif: true });
-        text(story.body, 22, "#897593", 17);
-        text(story.moment, 22, "#a07999", 27, { serif: true });
-      }
-      text(report2.storyNote || "", 17, "#b2a0bb", 21);
-    }
     heading("02", "\u4F60\u771F\u6B63\u60F3\u88AB\u600E\u6837\u5BF9\u5F85\uFF1F");
     text(r.explanation);
     for (const e of report2.evidence) card(e.group + " \xB7 " + e.scene, "\u4F60\u7684\u9009\u62E9\uFF1A" + e.choice, e.reading);
@@ -254,10 +241,16 @@
     for (const item of r.risks) card("\u770B\u662F\u5426\u53CD\u590D\u53D1\u751F\uFF0C\u4E5F\u770B\u6709\u6CA1\u6709\u8C03\u6574", item.title, item.scene + "\n" + item.consequence, "#fcf6f2");
     heading("04", "\u8FD9\u6837\u7684 ta\uFF0C\u4F1A\u600E\u6837\u4E0E\u4F60\u76F8\u5904\uFF1F");
     r.help.forEach((item, i) => card(String(i + 1).padStart(2, "0"), item.title, item.body));
-    heading("05", "\u4E0B\u4E00\u6B21\uFF0C\u53EF\u4EE5\u8FD9\u6837\u5F00\u53E3");
+    if ((_a = report2.stories) == null ? void 0 : _a.length) {
+      heading("05", "\u5728\u6545\u4E8B\u91CC\uFF0C\u770B\u89C1\u4E00\u79CD\u76F8\u5904");
+      text("\u4E09\u5219\u6545\u4E8B\uFF0C\u4E09\u4E2A\u5173\u7CFB\u89C6\u89D2\uFF0C\u6162\u6162\u8BFB\u5B8C\u3002", 21, "#a08aa9");
+      for (const story of report2.stories) card(story.source, story.situation, story.body + "\n\n" + story.moment);
+      text(report2.storyNote || "", 17, "#b2a0bb", 21);
+    }
+    heading("06", "\u4E0B\u4E00\u6B21\uFF0C\u53EF\u4EE5\u8FD9\u6837\u5F00\u53E3");
     card("\u5C11\u505A\u4E00\u70B9", r.dont, "\u8BD5\u7740\u6539\u6210\uFF1A" + r.do, "#f8f6f2");
     card("\u8FD9\u53E5\u8BDD\u53EF\u4EE5\u76F4\u63A5\u5E26\u8D70", r.script, "\u8BB0\u4F4F\uFF1A" + r.principle);
-    heading("06", "\u672A\u6765\u4E00\u5468\uFF0C\u628A\u89C2\u5BDF\u53D8\u6210\u9009\u62E9");
+    heading("07", "\u672A\u6765\u4E00\u5468\uFF0C\u628A\u89C2\u5BDF\u53D8\u6210\u9009\u62E9");
     r.action.forEach((item, i) => text(i + 1 + ". " + item, 23, "#806a8b", 18));
     text("\u8FD9\u4EFD\u7ED3\u679C\u600E\u6837\u5F62\u6210", 26, "#9378a5", 17, { before: 35, serif: true });
     text(report2.methodNote + " \u91C7\u7528\u81EA\u5B9A\u4E49\u6743\u91CD\u4EA4\u53C9\u6BD4\u8F83\u76F8\u5904\u53CD\u5E94\u4E0E\u9700\u8981\uFF0C\u672A\u8FDB\u884C\u5FC3\u7406\u91CF\u8868\u4FE1\u6548\u5EA6\u9A8C\u8BC1\u3002\u5F15\u7528\u7814\u7A76\u4EC5\u63D0\u4F9B\u80CC\u666F\uFF0C\u4E0D\u4F5C\u4E3A\u672C\u6D4B\u8BD5\u51C6\u786E\u6027\u7684\u8BC1\u660E\u3002", 19, "#ac9ab5");
@@ -325,13 +318,13 @@ ${item.choice}`, 19, "#a18caa", 17));
   // site/story-theater.js
   function createStoryTheater(report2) {
     const root = document.createElement("section");
-    root.className = "story-feature";
+    root.className = "report-module story-feature";
     root.setAttribute("aria-label", "\u5173\u7CFB\u6545\u4E8B\u9009\u8BFB");
-    root.innerHTML = '<div class="story-feature-heading"><span class="story-eyebrow">STORIES OF LOVE</span><h2>\u5728\u6545\u4E8B\u91CC\uFF0C\u770B\u89C1\u4E00\u79CD\u76F8\u5904</h2><p class="story-match">\u4E09\u5219\u6545\u4E8B\uFF0C\u4E09\u4E2A\u5173\u7CFB\u89C6\u89D2\uFF0C\u6162\u6162\u8BFB\u5B8C\u3002</p></div>';
+    root.innerHTML = '<div class="module-kicker">05 / \u5173\u7CFB\u6545\u4E8B\u9009\u8BFB</div><h2 class="module-heading">\u5728\u6545\u4E8B\u91CC\uFF0C\u770B\u89C1\u4E00\u79CD\u76F8\u5904</h2><p class="story-match">\u4E09\u5219\u6545\u4E8B\uFF0C\u4E09\u4E2A\u5173\u7CFB\u89C6\u89D2\uFF0C\u6162\u6162\u8BFB\u5B8C\u3002</p>';
     for (const [index, story] of report2.stories.entries()) {
       const card = document.createElement("article");
       card.className = "reading-story";
-      for (const [tag, cls, value] of [["span", "reading-number", "\u6545\u4E8B " + String(index + 1).padStart(2, "0")], ["h3", "reading-source", story.source], ["h4", "reading-situation", story.situation], ["p", "reading-body", story.body], ["p", "reading-moment", story.moment]]) {
+      for (const [tag, cls, value] of [["h3", "reading-source", story.source], ["h4", "reading-situation", story.situation], ["p", "reading-body", story.body], ["p", "reading-moment", story.moment]]) {
         const el = document.createElement(tag);
         el.className = cls;
         el.textContent = value;
@@ -556,7 +549,6 @@ ${item.choice}`, 19, "#a18caa", 17));
       <div class="result-keywords">${r.keywords.map((k) => `<span>${esc(k)}</span>`).join("")}</div>
       <p class="result-intro">${esc(r.intro)}</p>
     </article>
-    <div id="storyMount"></div>
     <article class="report-module">
       <div class="module-kicker">02 / \u4ECE\u4F60\u7684\u9009\u62E9\u51FA\u53D1</div><h2 class="module-heading">\u4F60\u771F\u6B63\u60F3\u88AB\u600E\u6837\u5BF9\u5F85\uFF1F</h2>
       <p>${esc(r.explanation)}</p>
@@ -566,8 +558,8 @@ ${item.choice}`, 19, "#a18caa", 17));
     </article>
     <article class="report-module"><div class="module-kicker">03 / \u907F\u5751\u6307\u5357</div><h2 class="module-heading">\u8FD9\u7C7B\u76F8\u5904\uFF0C\u503C\u5F97\u8C28\u614E</h2><p>\u770B\u662F\u5426\u53CD\u590D\u53D1\u751F\uFF0C\u4E5F\u770B\u63D0\u51FA\u4E4B\u540E\u6709\u6CA1\u6709\u5B9E\u9645\u8C03\u6574\u3002</p><div class="risk-grid">${r.risks.map((item) => `<div class="risk-card"><span class="risk-icon" aria-hidden="true">\u2198</span><h3>${esc(item.title)}</h3><p>${esc(item.scene)}</p><p class="consequence">${esc(item.consequence)}</p></div>`).join("")}</div></article>
     <article class="report-module"><div class="module-kicker">04 / \u628A\u9002\u914D\u843D\u5230\u884C\u52A8</div><h2 class="module-heading">\u8FD9\u6837\u7684 ta\uFF0C\u4F1A\u600E\u6837\u4E0E\u4F60\u76F8\u5904\uFF1F</h2><div class="help-grid">${r.help.map((item, i) => `<div class="help-item"><span class="help-number">${String(i + 1).padStart(2, "0")}</span><div><h3>${esc(item.title)}</h3><p>${esc(item.body)}</p></div></div>`).join("")}</div></article>
-    <article class="report-module"><div class="module-kicker">05 / \u6C9F\u901A\u4E0E\u76F8\u5904\u6307\u5357</div><h2 class="module-heading">\u4E0B\u4E00\u6B21\uFF0C\u53EF\u4EE5\u8FD9\u6837\u5F00\u53E3</h2><div class="practice-grid"><div class="practice"><strong>\u5C11\u505A\u4E00\u70B9</strong><p>${esc(r.dont)}</p></div><div class="practice positive"><strong>\u8BD5\u7740\u6539\u6210</strong><p>${esc(r.do)}</p></div></div><div class="script-box"><small>\u628A\u9700\u8981\u8BF4\u5177\u4F53 \xB7 \u8FD9\u53E5\u8BDD\u53EF\u4EE5\u76F4\u63A5\u5E26\u8D70</small><blockquote>${esc(r.script)}</blockquote><button id="copyScript" class="copy-script" type="button">\u590D\u5236\u8FD9\u53E5\u8BDD</button></div><p class="principle">\u8BB0\u4F4F\uFF1A${esc(r.principle)}</p></article>
-    <article class="report-module kit"><div class="module-kicker">06 / \u4F60\u7684\u4E13\u5C5E\u6E05\u9192\u9526\u56CA</div><h2 class="module-heading">\u672A\u6765\u4E00\u5468\uFF0C\u628A\u89C2\u5BDF\u53D8\u6210\u9009\u62E9</h2><ul class="action-list">${r.action.map((item) => `<li><span class="action-check" aria-hidden="true"></span><span>${esc(item)}</span></li>`).join("")}</ul>
+    <div id="storyMount"></div><article class="report-module"><div class="module-kicker">06 / \u6C9F\u901A\u4E0E\u76F8\u5904\u6307\u5357</div><h2 class="module-heading">\u4E0B\u4E00\u6B21\uFF0C\u53EF\u4EE5\u8FD9\u6837\u5F00\u53E3</h2><div class="practice-grid"><div class="practice"><strong>\u5C11\u505A\u4E00\u70B9</strong><p>${esc(r.dont)}</p></div><div class="practice positive"><strong>\u8BD5\u7740\u6539\u6210</strong><p>${esc(r.do)}</p></div></div><div class="script-box"><small>\u628A\u9700\u8981\u8BF4\u5177\u4F53 \xB7 \u8FD9\u53E5\u8BDD\u53EF\u4EE5\u76F4\u63A5\u5E26\u8D70</small><blockquote>${esc(r.script)}</blockquote><button id="copyScript" class="copy-script" type="button">\u590D\u5236\u8FD9\u53E5\u8BDD</button></div><p class="principle">\u8BB0\u4F4F\uFF1A${esc(r.principle)}</p></article>
+    <article class="report-module kit"><div class="module-kicker">07 / \u4F60\u7684\u4E13\u5C5E\u6E05\u9192\u9526\u56CA</div><h2 class="module-heading">\u672A\u6765\u4E00\u5468\uFF0C\u628A\u89C2\u5BDF\u53D8\u6210\u9009\u62E9</h2><ul class="action-list">${r.action.map((item) => `<li><span class="action-check" aria-hidden="true"></span><span>${esc(item)}</span></li>`).join("")}</ul>
       <details class="report-method"><summary>\u8FD9\u4EFD\u7ED3\u679C\u600E\u6837\u5F62\u6210 \xB7 \u67E5\u770B\u672C\u6B21 12 \u9879\u9009\u62E9</summary><p>${esc(report.methodNote)}</p><p>\u672C\u6D4B\u8BD5\u7528\u81EA\u5B9A\u4E49\u6743\u91CD\u4EA4\u53C9\u6BD4\u8F83\u76F8\u5904\u53CD\u5E94\u4E0E\u9700\u8981\uFF0C\u4F18\u5148\u5F15\u7528\u4E0D\u540C\u60C5\u5883\u4E2D\u7684\u5B9E\u9645\u9009\u9879\uFF1B\u63A5\u8FD1\u7684\u7ED3\u679C\u4F1A\u660E\u786E\u63D0\u793A\u3002\u652F\u6301\u504F\u597D\u4E0E\u5047\u8BBE\u9898\u4E0D\u7528\u4E8E\u5355\u72EC\u5224\u5B9A\u884C\u4E3A\u6A21\u5F0F\u3002\u9898\u5E93\u672A\u8FDB\u884C\u5FC3\u7406\u91CF\u8868\u4FE1\u6548\u5EA6\u9A8C\u8BC1\uFF0C\u4E0D\u8F93\u51FA\u8BCA\u65AD\u6216\u201C\u5951\u5408\u7387\u201D\u3002</p><p>\u4EE5\u4E0B\u7814\u7A76\u4EC5\u7528\u4E8E\u7406\u89E3\u5173\u7CFB\u56DE\u5E94\u4E0E\u4F9D\u604B\u7814\u7A76\u80CC\u666F\uFF0C\u5E76\u975E\u672C\u6D4B\u8BD5\u51C6\u786E\u6027\u7684\u80CC\u4E66\u3002</p><ul>${report.references.map((ref) => `<li><a href="${safeLink(ref.url)}" target="_blank" rel="noopener noreferrer">${esc(ref.title)}</a>\uFF1A${esc(ref.note)}</li>`).join("")}</ul><div class="all-choices">${report.choices.map((item, i) => `<p><b>${i + 1}. ${esc(item.scene)}</b><br>${esc(item.choice)}</p>`).join("")}</div></details>
     </article>`;
     $("#copyScript").addEventListener("click", () => copyText(r.script, "\u8FD9\u53E5\u8BDD\u5DF2\u590D\u5236"));

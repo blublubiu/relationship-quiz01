@@ -119,7 +119,6 @@ function renderReport(value) {
       <div class="result-keywords">${r.keywords.map(k => `<span>${esc(k)}</span>`).join('')}</div>
       <p class="result-intro">${esc(r.intro)}</p>
     </article>
-    <div id="storyMount"></div>
     <article class="report-module">
       <div class="module-kicker">02 / 从你的选择出发</div><h2 class="module-heading">你真正想被怎样对待？</h2>
       <p>${esc(r.explanation)}</p>
@@ -129,8 +128,8 @@ function renderReport(value) {
     </article>
     <article class="report-module"><div class="module-kicker">03 / 避坑指南</div><h2 class="module-heading">这类相处，值得谨慎</h2><p>看是否反复发生，也看提出之后有没有实际调整。</p><div class="risk-grid">${r.risks.map(item => `<div class="risk-card"><span class="risk-icon" aria-hidden="true">↘</span><h3>${esc(item.title)}</h3><p>${esc(item.scene)}</p><p class="consequence">${esc(item.consequence)}</p></div>`).join('')}</div></article>
     <article class="report-module"><div class="module-kicker">04 / 把适配落到行动</div><h2 class="module-heading">这样的 ta，会怎样与你相处？</h2><div class="help-grid">${r.help.map((item, i) => `<div class="help-item"><span class="help-number">${String(i + 1).padStart(2, '0')}</span><div><h3>${esc(item.title)}</h3><p>${esc(item.body)}</p></div></div>`).join('')}</div></article>
-    <article class="report-module"><div class="module-kicker">05 / 沟通与相处指南</div><h2 class="module-heading">下一次，可以这样开口</h2><div class="practice-grid"><div class="practice"><strong>少做一点</strong><p>${esc(r.dont)}</p></div><div class="practice positive"><strong>试着改成</strong><p>${esc(r.do)}</p></div></div><div class="script-box"><small>把需要说具体 · 这句话可以直接带走</small><blockquote>${esc(r.script)}</blockquote><button id="copyScript" class="copy-script" type="button">复制这句话</button></div><p class="principle">记住：${esc(r.principle)}</p></article>
-    <article class="report-module kit"><div class="module-kicker">06 / 你的专属清醒锦囊</div><h2 class="module-heading">未来一周，把观察变成选择</h2><ul class="action-list">${r.action.map(item => `<li><span class="action-check" aria-hidden="true"></span><span>${esc(item)}</span></li>`).join('')}</ul>
+    <div id="storyMount"></div><article class="report-module"><div class="module-kicker">06 / 沟通与相处指南</div><h2 class="module-heading">下一次，可以这样开口</h2><div class="practice-grid"><div class="practice"><strong>少做一点</strong><p>${esc(r.dont)}</p></div><div class="practice positive"><strong>试着改成</strong><p>${esc(r.do)}</p></div></div><div class="script-box"><small>把需要说具体 · 这句话可以直接带走</small><blockquote>${esc(r.script)}</blockquote><button id="copyScript" class="copy-script" type="button">复制这句话</button></div><p class="principle">记住：${esc(r.principle)}</p></article>
+    <article class="report-module kit"><div class="module-kicker">07 / 你的专属清醒锦囊</div><h2 class="module-heading">未来一周，把观察变成选择</h2><ul class="action-list">${r.action.map(item => `<li><span class="action-check" aria-hidden="true"></span><span>${esc(item)}</span></li>`).join('')}</ul>
       <details class="report-method"><summary>这份结果怎样形成 · 查看本次 12 项选择</summary><p>${esc(report.methodNote)}</p><p>本测试用自定义权重交叉比较相处反应与需要，优先引用不同情境中的实际选项；接近的结果会明确提示。支持偏好与假设题不用于单独判定行为模式。题库未进行心理量表信效度验证，不输出诊断或“契合率”。</p><p>以下研究仅用于理解关系回应与依恋研究背景，并非本测试准确性的背书。</p><ul>${report.references.map(ref => `<li><a href="${safeLink(ref.url)}" target="_blank" rel="noopener noreferrer">${esc(ref.title)}</a>：${esc(ref.note)}</li>`).join('')}</ul><div class="all-choices">${report.choices.map((item, i) => `<p><b>${i + 1}. ${esc(item.scene)}</b><br>${esc(item.choice)}</p>`).join('')}</div></details>
     </article>`;
   $('#copyScript').addEventListener('click', () => copyText(r.script, '这句话已复制'));
