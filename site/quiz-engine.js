@@ -1,3 +1,4 @@
+import { selectStories } from './story-logic.js';
 export const CONTENT_VERSION = 'partner-v2-20261016';
 
 export function validateContent(content) {
@@ -75,6 +76,7 @@ export function buildReport(content, answers, now = new Date().toISOString()) {
     return Object.entries(option.styles).some(([key, val]) => val >= 2 && key !== dominantStyle && (key === 'collaborate' || dominantStyle === 'collaborate'));
   });
   const close = !!alternative && Math.abs(winner.score - alternative.score) < .09;
+  const choices = selected.map(({ q, option }) => ({ questionId: q.id, optionId: option.id, scene: q.short, choice: option.text }));
   return {
     version: CONTENT_VERSION, createdAt: now, result: winner.result,
     evidence: evidence.map(({ q, option }) => ({ questionId: q.id, group: content.groups.find(g => g.id === q.group).name, scene: q.short, question: q.prompt, choice: option.text, reading: option.reading })),
@@ -82,7 +84,9 @@ export function buildReport(content, answers, now = new Date().toISOString()) {
     matchNote: prioritizeRepair ? '你的选择在多个冲突情境中都指向修复的需要，并在最后一题再次强调了这一点，因此本次优先呈现冲突修复方向。' : close ? `你的选择同时带有“${alternative.result.name}”的线索。这次优先呈现更突出的相处需要，可把两种方向都作为观察点。` : '这个推荐来自多道情境的交叉线索。它是下一步观察的方向，适配仍需要双方真实相处来确认。',
     secondaryName: close ? alternative.result.name : null,
     groundedNote: directChoices.length >= 3 ? '你在多个情境中选择了直接协商或有约定地暂停。报告会保留这部分能力；当前推荐不等于你没有边界或不会处理关系。' : '',
-    choices: selected.map(({ q, option }) => ({ scene: q.short, choice: option.text })),
+    choices,
+    ...selectStories(content.stories?.[winner.result.id] || [], choices),
+    storyEdition: content.storyEdition || null, storyNote: content.storyNote || '',
     references: content.references, methodNote: content.methodNote,
   };
 }

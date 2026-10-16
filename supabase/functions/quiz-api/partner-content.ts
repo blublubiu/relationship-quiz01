@@ -1,4 +1,5 @@
 import { getQuizContent as getLegacyContent } from "./quiz-content.ts";
+import { partnerStories, STORY_EDITION, STORY_NOTE } from "./partner-stories.ts";
 
 // Editorial observations, not clinical scales or attachment diagnoses.
 export const CONTENT_VERSION = "partner-v2-20261016";
@@ -7,6 +8,9 @@ const choice = (id: string, text: string, styles: Record<string, number>, needs:
 export function getPartnerContent() {
   return {
     version: CONTENT_VERSION,
+    storyEdition: STORY_EDITION,
+    storyNote: STORY_NOTE,
+    stories: partnerStories,
     title: "潜意识伴侣契合度测试",
     methodNote: "依据你在具体情境中的选择，推荐值得观察的伴侣行为。六种名称是相处画像，不是人格或依恋类型诊断。",
     groups: [

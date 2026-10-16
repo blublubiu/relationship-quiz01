@@ -1,6 +1,8 @@
 import { CONTENT_VERSION, buildReport, shuffledOptions, validateContent } from './quiz-engine.js';
 import { artMarkup } from './quiz-art.js';
 import { createReportImage, createShareImage } from './quiz-export.js';
+import { createStoryTheater } from './story-theater.js';
+import { selectStories } from './story-logic.js';
 
 const $ = selector => document.querySelector(selector);
 const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -8,6 +10,7 @@ const SESSION_KEY = 'partner-quiz-active-v2', REPORT_KEY = 'partner-quiz-last-re
 const config = window.RELATIONSHIP_QUIZ_CONFIG || {};
 const localPreview = Boolean(config.localPreview && ['localhost', '127.0.0.1', '[::1]'].includes(location.hostname));
 let session = null, report = null, advanceTimer = null, activeModal = null, returnFocus = null, exporting = false, imageFile = null, lastReviewIndex = -1;
+let storyTheater = null;
 
 function readStorage(storage, key) { try { return JSON.parse(storage.getItem(key) || 'null'); } catch { return null; } }
 function saveStorage(storage, key, value) { try { storage.setItem(key, JSON.stringify(value)); } catch { /* Export remains available if storage is disabled. */ } }
@@ -15,21 +18,25 @@ function getLastReport() { try { const r = readStorage(localStorage, REPORT_KEY)
 function persist() { try { if (session) saveStorage(sessionStorage, SESSION_KEY, session); } catch { /* Browsing still works with storage disabled. */ } }
 function showView(id) {
   clearTimeout(advanceTimer);
+  if (id !== 'result') storyTheater?.pause();
   for (const view of ['gate', 'quiz', 'result']) $('#' + view).classList.toggle('hidden', view !== id);
   window.scrollTo({ top: 0, behavior: 'instant' });
 }
 function toast(text) { $('#toast').textContent = text; $('#toast').classList.add('show'); clearTimeout(toast.timer); toast.timer = setTimeout(() => $('#toast').classList.remove('show'), 2600); }
 
-async function startRequest(code, signal) {
+async function apiRequest(path, payload, signal) {
   if (!localPreview && (!config.supabaseUrl || !config.publishableKey)) throw new Error('测试服务尚未配置，请联系店铺客服。');
-  const url = localPreview ? '/api/start' : config.supabaseUrl.replace(/\/$/, '') + '/functions/v1/quiz-api/api/start';
+  const url = localPreview ? '/api/' + path : config.supabaseUrl.replace(/\/$/, '') + '/functions/v1/quiz-api/api/' + path;
   const headers = { 'Content-Type': 'application/json' };
   if (!localPreview) headers.apikey = config.publishableKey;
-  const response = await fetch(url, { method: 'POST', headers, body: JSON.stringify({ code, content_version: CONTENT_VERSION }), signal, cache: 'no-store' });
+  const response = await fetch(url, { method: 'POST', headers, body: JSON.stringify(payload), signal, cache: 'no-store' });
   const data = await response.json();
   if (!response.ok) throw new Error(data.error || '暂时无法开始测试，请稍后再试。');
-  validateContent(data.content);
   return data;
+}
+async function startRequest(code, signal) {
+  const data = await apiRequest('start', { code, content_version: CONTENT_VERSION }, signal);
+  validateContent(data.content); return data;
 }
 
 $('#gateForm').addEventListener('submit', async event => {
@@ -99,6 +106,7 @@ $('#next').addEventListener('click', nextQuestion);
 
 function safeLink(url) { try { const parsed = new URL(url); return parsed.protocol === 'https:' ? esc(parsed.href) : '#'; } catch { return '#'; } }
 function renderReport(value) {
+  storyTheater?.destroy(); storyTheater = null;
   report = value; const r = report.result;
   $('#resultBody').innerHTML = `
     <article class="report-module report-hero">
@@ -110,6 +118,7 @@ function renderReport(value) {
       <div class="result-keywords">${r.keywords.map(k => `<span>${esc(k)}</span>`).join('')}</div>
       <p class="result-intro">${esc(r.intro)}</p>
     </article>
+    <div id="storyMount"></div>
     <article class="report-module">
       <div class="module-kicker">02 / 从你的选择出发</div><h2 class="module-heading">你真正想被怎样对待？</h2>
       <p>${esc(r.explanation)}</p>
@@ -124,6 +133,29 @@ function renderReport(value) {
       <details class="report-method"><summary>这份结果怎样形成 · 查看本次 12 项选择</summary><p>${esc(report.methodNote)}</p><p>本测试用自定义权重交叉比较相处反应与需要，优先引用不同情境中的实际选项；接近的结果会明确提示。支持偏好与假设题不用于单独判定行为模式。题库未进行心理量表信效度验证，不输出诊断或“契合率”。</p><p>以下研究仅用于理解关系回应与依恋研究背景，并非本测试准确性的背书。</p><ul>${report.references.map(ref => `<li><a href="${safeLink(ref.url)}" target="_blank" rel="noopener noreferrer">${esc(ref.title)}</a>：${esc(ref.note)}</li>`).join('')}</ul><div class="all-choices">${report.choices.map((item, i) => `<p><b>${i + 1}. ${esc(item.scene)}</b><br>${esc(item.choice)}</p>`).join('')}</div></details>
     </article>`;
   $('#copyScript').addEventListener('click', () => copyText(r.script, '这句话已复制'));
+  if (report.stories?.length === 3) {
+    storyTheater = createStoryTheater(report); $('#storyMount').append(storyTheater.element);
+  } else {
+    $('#storyMount').innerHTML = '<section class="story-upgrade"><span class="story-eyebrow">THE STORY CONTINUES</span><h2>给这份报告，补上三则故事</h2><p>这是你在更新前保存的结果。输入原密码即可补充故事，不扣测试次数；原来的分析会继续保留。</p><form id="storyUpgradeForm"><input id="storyUpgradeCode" type="text" aria-label="用于补充故事的原测试密码" placeholder="输入原测试密码" autocomplete="off" autocapitalize="characters" maxlength="40" required><button class="btn secondary" type="submit">补充故事 · 不扣次</button></form><div id="storyUpgradeStatus" role="status"></div></section>';
+    $('#storyUpgradeForm').addEventListener('submit', async event => {
+      event.preventDefault();
+      const code = $('#storyUpgradeCode').value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+      if (code.length !== 12) { $('#storyUpgradeStatus').textContent = '请输入原来的 12 位测试密码。'; return; }
+      const button = $('#storyUpgradeForm button'), status = $('#storyUpgradeStatus'), controller = new AbortController();
+      button.disabled = true; status.textContent = '正在补充故事，不会扣除次数…';
+      const timeout = setTimeout(() => controller.abort(), 30000);
+      try {
+        const data = await apiRequest('stories', { code, result_id: report.result.id }, controller.signal);
+        if (data.stories?.length !== 3) throw new Error('故事内容暂未就绪，请稍后再试。');
+        const choices = report.choices.map(choice => ({ ...choice, optionId: choice.optionId || data.optionLookup?.[choice.choice] }));
+        const updated = { ...report, choices, ...selectStories(data.stories, choices), storyEdition: data.storyEdition, storyNote: data.storyNote };
+        try { saveStorage(localStorage, REPORT_KEY, updated); } catch { /* current result still updates */ }
+        if (session?.content) { session.content.stories = { ...session.content.stories, [report.result.id]: data.stories }; session.content.storyEdition = data.storyEdition; session.content.storyNote = data.storyNote; persist(); }
+        renderReport(updated); toast('三则故事已补充，没有扣除测试次数');
+      } catch (error) { status.textContent = error.name === 'AbortError' || error instanceof TypeError ? '连接暂时中断，请稍后重试。本次不扣次。' : error.message; }
+      finally { clearTimeout(timeout); button.disabled = false; }
+    });
+  }
 }
 
 $('#restart').addEventListener('click', () => {
@@ -144,7 +176,7 @@ async function copyText(text, success) {
   }
 }
 
-function openModal(id) { returnFocus = document.activeElement; activeModal = id; $('#' + id).classList.remove('hidden'); document.body.classList.add('modal-open'); $('#' + id + ' button')?.focus(); }
+function openModal(id) { storyTheater?.pause(); returnFocus = document.activeElement; activeModal = id; $('#' + id).classList.remove('hidden'); document.body.classList.add('modal-open'); $('#' + id + ' button')?.focus(); }
 function closeModal() { if (!activeModal) return; $('#' + activeModal).classList.add('hidden'); activeModal = null; document.body.classList.remove('modal-open'); if (returnFocus?.isConnected) returnFocus.focus({ preventScroll: true }); }
 document.addEventListener('click', event => {
   if (!(event.target instanceof Element)) return;

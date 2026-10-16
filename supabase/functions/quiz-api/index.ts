@@ -1,6 +1,7 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { getQuizContent } from "./quiz-content.ts";
 import { CONTENT_VERSION, getPartnerContent } from "./partner-content.ts";
+import { partnerStories, STORY_EDITION, STORY_NOTE } from "./partner-stories.ts";
 
 const codeAlphabet = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
 const sessionTtl = 8 * 60 * 60;
@@ -121,6 +122,31 @@ Deno.serve(async (req: Request) => {
   try {
     const url = new URL(req.url);
     const route = url.pathname.slice(url.pathname.indexOf("/quiz-api") + "/quiz-api".length);
+
+    // Upgrade a previously saved report without consuming another paid attempt.
+    // An issued password is still required, including for an exhausted password.
+    if (req.method === "POST" && route === "/api/stories") {
+      const payload = await readBody(req);
+      const code = normalizeCode(payload.code);
+      const resultId = String(payload.result_id ?? "");
+      if (!/^R[1-6]$/.test(resultId) || code.length !== 12) {
+        return response({ error: "请检查原密码后重试。本次不会扣除测试次数。" }, 400, origin);
+      }
+      let { data, error } = await supabase.from("quiz_access_codes")
+        .select("disabled_at").eq("code_hash", await sha256(code)).maybeSingle();
+      if (error) throw error;
+      if (!data) {
+        ({ data, error } = await supabase.from("quiz_access_codes")
+          .select("disabled_at").eq("code_hash", await sha256(legacyFormattedCode(code))).maybeSingle());
+        if (error) throw error;
+      }
+      if (!data || data.disabled_at !== null) return failureResponse("invalid", origin);
+      const content = getPartnerContent();
+      return response({ storyEdition: STORY_EDITION, storyNote: STORY_NOTE,
+        stories: partnerStories[resultId as keyof typeof partnerStories],
+        optionLookup: Object.fromEntries(content.questions.flatMap(q => q.options.map(option => [option.text, option.id]))),
+      }, 200, origin);
+    }
 
     if (req.method === "POST" && route === "/api/access") {
       const codePayload = await readBody(req);

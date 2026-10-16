@@ -72,6 +72,18 @@ export async function createReportImage(report) {
   text(r.quote, 30, '#7b608d', 24, { align: 'center', serif: true });
   text(r.keywords.join(' · '), 19, '#a28ab5', 25, { align: 'center' });
   text(r.intro, 24);
+  if (report.stories?.length) {
+    heading('故事插页', '如果这种相处，走进一则故事');
+    text(report.storyMatch || '故事选编', 21, '#a08aa9');
+    if (report.storyClue) text(`从你的选择读起：${report.storyClue.scene}\n“${report.storyClue.choice}”`, 20, '#9a82a9');
+    for (const story of report.stories) {
+      text(story.source, 20, '#a58cb7', 10, { before: 18 });
+      text(story.situation, 25, '#796187', 15, { serif: true });
+      text(story.body, 22, '#897593', 17);
+      text(story.moment, 22, '#a07999', 27, { serif: true });
+    }
+    text(report.storyNote || '', 17, '#b2a0bb', 21);
+  }
   heading('02', '你真正想被怎样对待？'); text(r.explanation);
   for (const e of report.evidence) card(e.group + ' · ' + e.scene, '你的选择：' + e.choice, e.reading);
   if (report.nuance) card('还有一处选择，值得一起看', report.nuance.scene + '：' + report.nuance.choice, report.nuance.text, '#fcf8f2');

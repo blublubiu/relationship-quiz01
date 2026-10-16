@@ -6,13 +6,14 @@ import { stripTypeScriptTypes } from 'node:module';
 import { webcrypto } from 'node:crypto';
 import { getPartnerContent, CONTENT_VERSION } from '../supabase/functions/quiz-api/partner-content.ts';
 import { getQuizContent } from '../supabase/functions/quiz-api/quiz-content.ts';
+import { partnerStories, STORY_EDITION, STORY_NOTE } from '../supabase/functions/quiz-api/partner-stories.ts';
 
 const source = stripTypeScriptTypes(readFileSync(new URL('../supabase/functions/quiz-api/index.ts', import.meta.url), 'utf8').replace(/^import .*;\r?\n/gm, ''), { mode: 'strip' });
-function makeHandler(rpcResults = [{ ok: true, remaining: 4 }]) {
+function makeHandler(rpcResults = [{ ok: true, remaining: 4 }], record = { max_uses: 5, used_count: 0, disabled_at: null }) {
   let handler, calls = 0;
-  const db = { rpc: async () => ({ data: rpcResults[Math.min(calls++, rpcResults.length - 1)], error: null }), from: () => ({ select() { return this; }, eq() { return this; }, maybeSingle: async () => ({ data: { max_uses: 5, used_count: 0, disabled_at: null }, error: null }) }) };
+  const db = { rpc: async () => ({ data: rpcResults[Math.min(calls++, rpcResults.length - 1)], error: null }), from: () => ({ select() { return this; }, eq() { return this; }, maybeSingle: async () => ({ data: record, error: null }) }) };
   const env = { SUPABASE_URL: 'https://example.invalid', SUPABASE_SERVICE_ROLE_KEY: 'local-unit-test', ALLOWED_ORIGINS: 'https://relationship-quiz01.pages.dev' };
-  vm.runInNewContext(source, { createClient: () => db, getQuizContent, getPartnerContent, CONTENT_VERSION, Deno: { env: { get: key => env[key] }, serve: value => { handler = value; } }, TextEncoder, Headers, Response, URL, crypto: webcrypto, btoa, console: { error() {} } });
+  vm.runInNewContext(source, { createClient: () => db, getQuizContent, getPartnerContent, CONTENT_VERSION, partnerStories, STORY_EDITION, STORY_NOTE, Deno: { env: { get: key => env[key] }, serve: value => { handler = value; } }, TextEncoder, Headers, Response, URL, crypto: webcrypto, btoa, console: { error() {} } });
   return { handler, calls: () => calls };
 }
 const request = (body, method = 'POST', origin = 'https://relationship-quiz01.pages.dev', path = '/api/start') => new Request('https://example.invalid/functions/v1/quiz-api' + path, { method, headers: { origin, 'Content-Type': 'application/json' }, ...(method === 'POST' ? { body: JSON.stringify(body) } : {}) });
@@ -54,4 +55,22 @@ test('the deployed legacy frontend can finish its previous flow during the rollo
   assert.equal(access.status, 200); assert.ok((await access.json()).content.relationshipReports); assert.equal(api.calls(), 0);
   const start = await api.handler(request({ code: 'ABCD-EFGH-2345' }));
   assert.equal(start.status, 200); assert.equal((await start.json()).content, undefined); assert.equal(api.calls(), 1);
+});
+
+test('an exhausted but valid password can upgrade its saved report without consuming another attempt', async () => {
+  const api = makeHandler([], { max_uses: 5, used_count: 5, disabled_at: null });
+  const response = await api.handler(request({ code: 'ABCD-EFGH-2345', result_id: 'R3' }, 'POST', 'https://relationship-quiz01.pages.dev', '/api/stories'));
+  assert.equal(response.status, 200); const data = await response.json();
+  assert.equal(api.calls(), 0); assert.equal(data.stories.length, 3);
+  assert.ok(data.stories.every(story => story.id.startsWith('R3-')));
+  assert.equal(data.storyEdition, STORY_EDITION); assert.ok(data.optionLookup);
+  assert.equal(data.content, undefined);
+});
+
+test('invalid or disabled passwords do not receive the protected story selections', async () => {
+  for (const record of [null, { disabled_at: 1 }]) {
+    const api = makeHandler([], record);
+    const response = await api.handler(request({ code: 'ABCD-EFGH-2345', result_id: 'R1' }, 'POST', 'https://relationship-quiz01.pages.dev', '/api/stories'));
+    assert.equal(response.status, 404); assert.equal((await response.json()).stories, undefined); assert.equal(api.calls(), 0);
+  }
 });
