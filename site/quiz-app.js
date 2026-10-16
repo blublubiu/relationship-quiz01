@@ -1,27 +1,5 @@
 (() => {
   // site/story-logic.js
-  function splitVerbatim(text, preferredLength = 52) {
-    const pieces = [];
-    let current = "";
-    const characters = [...String(text)];
-    for (let i = 0; i < characters.length; i++) {
-      current += characters[i];
-      if (current.length >= preferredLength && /[。！？；]/u.test(characters[i])) {
-        while (i + 1 < characters.length && /[”’」』）]/u.test(characters[i + 1])) current += characters[++i];
-        pieces.push(current);
-        current = "";
-      }
-    }
-    if (current) pieces.push(current);
-    return pieces;
-  }
-  function storyFrames(story) {
-    return [
-      { kind: "situation", label: "\u5F00\u573A \xB7 \u5982\u679C\u4F60\u4E5F\u6709\u8FC7\u8FD9\u6837\u7684\u65F6\u523B", text: story.situation },
-      ...splitVerbatim(story.body).map((text) => ({ kind: "body", label: "\u6545\u4E8B \xB7 \u628A\u76F8\u5904\u653E\u8FDB\u4E00\u4E2A\u753B\u9762", text })),
-      ...splitVerbatim(story.moment, 62).map((text) => ({ kind: "moment", label: "\u56DE\u54CD \xB7 \u9009\u7F16\u539F\u6587", text }))
-    ];
-  }
   function selectStories(stories = [], choices = []) {
     const ranked = stories.map((story, index) => {
       const clues = choices.filter((choice) => {
@@ -259,7 +237,7 @@
       if (report2.storyClue) text(`\u4ECE\u4F60\u7684\u9009\u62E9\u8BFB\u8D77\uFF1A${report2.storyClue.scene}
 \u201C${report2.storyClue.choice}\u201D`, 20, "#9a82a9");
       for (const story of report2.stories) {
-        text(story.source, 20, "#a58cb7", 10, { before: 18 });
+        text(story.source, 28, "#654078", 15, { before: 24, serif: true });
         text(story.situation, 25, "#796187", 15, { serif: true });
         text(story.body, 22, "#897593", 17);
         text(story.moment, 22, "#a07999", 27, { serif: true });
@@ -346,153 +324,27 @@ ${item.choice}`, 19, "#a18caa", 17));
 
   // site/story-theater.js
   function createStoryTheater(report2) {
-    var _a;
     const root = document.createElement("section");
     root.className = "story-feature";
-    root.setAttribute("aria-label", "\u5173\u7CFB\u6545\u4E8B\u653E\u6620\u5BA4");
-    root.innerHTML = `<div class="story-feature-heading"><span class="story-eyebrow">A LOVE STORY, FOR YOU</span><h2>\u5982\u679C\u8FD9\u79CD\u76F8\u5904\uFF0C\u8D70\u8FDB\u4E00\u5219\u6545\u4E8B</h2><p class="story-match"></p></div><div class="story-clue hidden"><small>\u4ECE\u4F60\u7684\u8FD9\u4E2A\u9009\u62E9\uFF0C\u5148\u8BFB\u8D77</small><p></p></div><div class="story-tabs" role="group" aria-label="\u9009\u62E9\u8981\u9605\u8BFB\u7684\u6545\u4E8B"></div><div class="cinema-screen"><div class="cinema-art" aria-hidden="true"></div><div class="screen-top"><span>\u5173\u7CFB\u6545\u4E8B\u653E\u6620\u5BA4</span><span class="screen-index"></span></div><div class="cinema-content"><div class="screen-couple"></div><span class="frame-label"></span><p class="frame-text" aria-live="polite"></p></div><div class="screen-bottom"><div class="screen-progress" aria-hidden="true"><i></i></div><div class="cinema-controls"><button class="frame-prev" type="button" aria-label="\u4E0A\u4E00\u5E55">\u2190</button><button class="film-play" type="button">\u64AD\u653E\u6545\u4E8B \u25B7</button><button class="frame-next" type="button" aria-label="\u4E0B\u4E00\u5E55">\u2192</button></div><p class="screen-hint">\u70B9\u51FB\u64AD\u653E\uFF0C\u6587\u5B57\u4F1A\u9010\u5E55\u6D6E\u73B0\uFF1B\u4E5F\u53EF\u4EE5\u7528\u5DE6\u53F3\u7BAD\u5934\u6162\u6162\u8BFB\u3002</p></div></div><div class="story-source"></div><details class="story-transcript"><summary>\u5C55\u5F00\u539F\u6587 \xB7 \u9759\u9759\u8BFB\u5B8C</summary><div class="transcript-source"></div><h3 class="transcript-situation"></h3><p class="transcript-body"></p><p class="transcript-moment"></p></details><p class="story-note"></p>`;
-    const $2 = (selector) => root.querySelector(selector);
-    $2(".story-match").textContent = report2.storyMatch;
-    $2(".cinema-art").innerHTML = artMarkup(report2.result.id);
-    $2(".story-note").textContent = report2.storyNote;
-    if (report2.storyClue) {
-      $2(".story-clue").classList.remove("hidden");
-      $2(".story-clue p").textContent = `\u5728\u201C${report2.storyClue.scene}\u201D\u91CC\uFF0C\u4F60\u9009\u4E86\uFF1A\u201C${report2.storyClue.choice}\u201D`;
-    }
-    let selected = 0, index = 0, frames = [], playing = false, elapsed = 0, startedAt = 0, frameAnimation = null, transition = null, destroyed = false;
-    const reduceMotion = (_a = window.matchMedia) == null ? void 0 : _a.call(window, "(prefers-reduced-motion: reduce)");
-    const duration = () => Math.max(7e3, Math.min(21e3, frames[index].text.length * 145 + 2400));
-    const buttons = report2.stories.map((story, i) => {
-      const button = document.createElement("button");
-      button.type = "button";
-      button.className = "story-tab";
-      const number = document.createElement("span");
-      number.className = "story-tab-number";
-      number.textContent = String(i + 1).padStart(2, "0");
-      const title = document.createElement("strong");
-      title.textContent = story.couple;
-      button.append(number, title);
-      button.setAttribute("aria-label", "\u9605\u8BFB\u6545\u4E8B\uFF1A" + story.couple);
-      button.addEventListener("click", () => selectStory(i));
-      $2(".story-tabs").append(button);
-      return button;
-    });
-    function syncControls() {
-      $2(".frame-prev").disabled = index === 0;
-      $2(".frame-next").disabled = index === frames.length - 1;
-      $2(".screen-index").textContent = `${String(index + 1).padStart(2, "0")} / ${String(frames.length).padStart(2, "0")} \u5E55`;
-      $2(".film-play").textContent = playing ? "\u6682\u505C\u653E\u6620 \u2161" : index === frames.length - 1 ? "\u4ECE\u5934\u653E\u6620 \u21BB" : elapsed ? "\u7EE7\u7EED\u64AD\u653E \u25B7" : "\u64AD\u653E\u6545\u4E8B \u25B7";
-      $2(".film-play").setAttribute("aria-pressed", String(playing));
-      $2(".frame-text").setAttribute("aria-live", playing ? "off" : "polite");
-    }
-    function updateProgress(fraction = elapsed / duration()) {
-      $2(".screen-progress i").style.transform = `scaleX(${Math.min(1, fraction)})`;
-    }
-    function pause() {
-      if (playing) elapsed = Math.min(duration(), elapsed + performance.now() - startedAt);
-      playing = false;
-      cancelAnimationFrame(frameAnimation);
-      frameAnimation = null;
-      syncControls();
-      updateProgress();
-    }
-    function tick(now) {
-      if (!playing || destroyed) return;
-      const spent = elapsed + now - startedAt;
-      updateProgress(spent / duration());
-      if (spent >= duration()) {
-        elapsed = 0;
-        if (index < frames.length - 1) showFrame(index + 1, true);
-        else {
-          playing = false;
-          syncControls();
-          updateProgress(1);
-        }
-        return;
+    root.setAttribute("aria-label", "\u5173\u7CFB\u6545\u4E8B\u9009\u8BFB");
+    root.innerHTML = '<div class="story-feature-heading"><span class="story-eyebrow">STORIES OF LOVE</span><h2>\u5728\u6545\u4E8B\u91CC\uFF0C\u770B\u89C1\u4E00\u79CD\u76F8\u5904</h2><p class="story-match">\u4E09\u5219\u6545\u4E8B\uFF0C\u4E09\u4E2A\u5173\u7CFB\u89C6\u89D2\uFF0C\u6162\u6162\u8BFB\u5B8C\u3002</p></div>';
+    for (const [index, story] of report2.stories.entries()) {
+      const card = document.createElement("article");
+      card.className = "reading-story";
+      for (const [tag, cls, value] of [["span", "reading-number", "\u6545\u4E8B " + String(index + 1).padStart(2, "0")], ["h3", "reading-source", story.source], ["h4", "reading-situation", story.situation], ["p", "reading-body", story.body], ["p", "reading-moment", story.moment]]) {
+        const el = document.createElement(tag);
+        el.className = cls;
+        el.textContent = value;
+        card.append(el);
       }
-      frameAnimation = requestAnimationFrame(tick);
+      root.append(card);
     }
-    function startClock() {
-      startedAt = performance.now();
-      frameAnimation = requestAnimationFrame(tick);
-    }
-    function showFrame(nextIndex, automatic = false) {
-      cancelAnimationFrame(frameAnimation);
-      clearTimeout(transition);
-      if (!automatic) playing = false;
-      index = nextIndex;
-      elapsed = 0;
-      const text = $2(".frame-text");
-      const paint = () => {
-        if (destroyed) return;
-        text.textContent = frames[index].text;
-        text.dataset.kind = frames[index].kind;
-        $2(".frame-label").textContent = frames[index].label;
-        text.classList.remove("is-leaving");
-        text.classList.add("is-arriving");
-        syncControls();
-        updateProgress(0);
-        if (playing) startClock();
-      };
-      text.classList.remove("is-arriving");
-      if (automatic && !(reduceMotion == null ? void 0 : reduceMotion.matches)) {
-        text.classList.add("is-leaving");
-        transition = setTimeout(paint, 420);
-      } else paint();
-    }
-    function selectStory(next) {
-      pause();
-      selected = next;
-      const story = report2.stories[selected];
-      frames = storyFrames(story);
-      buttons.forEach((button, i) => {
-        button.classList.toggle("selected", i === selected);
-        button.setAttribute("aria-pressed", String(i === selected));
-      });
-      $2(".screen-couple").textContent = story.couple;
-      $2(".story-source").textContent = story.source;
-      $2(".transcript-source").textContent = story.source;
-      $2(".transcript-situation").textContent = story.situation;
-      $2(".transcript-body").textContent = story.body;
-      $2(".transcript-moment").textContent = story.moment;
-      showFrame(0);
-    }
-    $2(".film-play").addEventListener("click", () => {
-      if (playing) {
-        pause();
-        return;
-      }
-      if (index === frames.length - 1) showFrame(0);
-      playing = true;
-      syncControls();
-      startClock();
-    });
-    $2(".frame-prev").addEventListener("click", () => {
-      if (index > 0) showFrame(index - 1);
-    });
-    $2(".frame-next").addEventListener("click", () => {
-      if (index < frames.length - 1) showFrame(index + 1);
-    });
-    $2(".story-transcript").addEventListener("toggle", () => {
-      if ($2(".story-transcript").open) pause();
-    });
-    const onVisibility = () => {
-      if (document.hidden) pause();
-    };
-    document.addEventListener("visibilitychange", onVisibility);
-    const observer = typeof IntersectionObserver === "function" ? new IntersectionObserver((entries) => {
-      if (!entries[0].isIntersecting && playing) pause();
-    }, { threshold: 0.05 }) : null;
-    frames = storyFrames(report2.stories[0]);
-    selectStory(0);
-    observer == null ? void 0 : observer.observe($2(".cinema-screen"));
-    return { element: root, pause, destroy() {
-      destroyed = true;
-      playing = false;
-      cancelAnimationFrame(frameAnimation);
-      clearTimeout(transition);
-      observer == null ? void 0 : observer.disconnect();
-      document.removeEventListener("visibilitychange", onVisibility);
+    const note = document.createElement("p");
+    note.className = "story-note";
+    note.textContent = report2.storyNote || "";
+    root.append(note);
+    return { element: root, pause() {
+    }, destroy() {
     } };
   }
 
