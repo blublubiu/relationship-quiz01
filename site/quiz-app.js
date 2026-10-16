@@ -237,7 +237,7 @@
       if (report2.storyClue) text(`\u4ECE\u4F60\u7684\u9009\u62E9\u8BFB\u8D77\uFF1A${report2.storyClue.scene}
 \u201C${report2.storyClue.choice}\u201D`, 20, "#9a82a9");
       for (const story of report2.stories) {
-        text(story.source, 28, "#654078", 15, { before: 24, serif: true });
+        text(story.source, 24, "#795389", 15, { before: 24, serif: true });
         text(story.situation, 25, "#796187", 15, { serif: true });
         text(story.body, 22, "#897593", 17);
         text(story.moment, 22, "#a07999", 27, { serif: true });

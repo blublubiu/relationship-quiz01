@@ -77,7 +77,7 @@ export async function createReportImage(report) {
     text(report.storyMatch || '故事选编', 21, '#a08aa9');
     if (report.storyClue) text(`从你的选择读起：${report.storyClue.scene}\n“${report.storyClue.choice}”`, 20, '#9a82a9');
     for (const story of report.stories) {
-      text(story.source, 28, '#654078', 15, { before: 24, serif: true });
+      text(story.source, 24, '#795389', 15, { before: 24, serif: true });
       text(story.situation, 25, '#796187', 15, { serif: true });
       text(story.body, 22, '#897593', 17);
       text(story.moment, 22, '#a07999', 27, { serif: true });
